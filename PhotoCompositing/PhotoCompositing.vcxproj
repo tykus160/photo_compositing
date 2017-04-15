@@ -112,9 +112,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src_ext\block.h" />
+    <ClInclude Include="src_ext\cGraphCutOptimizer.h" />
+    <ClInclude Include="src_ext\graph.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src_ext\cGraphCutOptimizer.cpp" />
+    <ClCompile Include="src_ext\graph.cpp" />
+    <ClCompile Include="src_ext\maxflow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
