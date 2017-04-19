@@ -18,6 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\bitmap\BMP.cpp" />
+    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\graph\graph.cpp" />
+    <ClCompile Include="src\graph\maxflow.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\bitmap\BMP.h" />
+    <ClInclude Include="src\bitmap\RGBAPixel.h" />
+    <ClInclude Include="src\graph\block.h" />
+    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="src\graph\graph.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{3792D793-157D-4737-AD43-73B1638B7DF0}</ProjectGuid>
@@ -110,18 +128,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="src\main.h" />
-    <ClInclude Include="src_ext\block.h" />
-    <ClInclude Include="src_ext\cGraphCutOptimizer.h" />
-    <ClInclude Include="src_ext\graph.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src_ext\cGraphCutOptimizer.cpp" />
-    <ClCompile Include="src_ext\graph.cpp" />
-    <ClCompile Include="src_ext\maxflow.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

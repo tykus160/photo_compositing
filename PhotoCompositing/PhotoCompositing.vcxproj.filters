@@ -1,45 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Pliki źródłowe">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="src">
+      <UniqueIdentifier>{870ebaf1-10c4-4a48-80e0-508adb7489e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki nagłówkowe">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="src\bitmap">
+      <UniqueIdentifier>{14fb6e70-262f-4694-a721-9cf29d77b292}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pliki zasobów">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src\graph">
+      <UniqueIdentifier>{01e8605d-9de9-4c92-bec8-6c855a6e5b2c}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\main.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src_ext\block.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src_ext\cGraphCutOptimizer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src_ext\graph.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>Pliki źródłowe</Filter>
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src_ext\cGraphCutOptimizer.cpp">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="src\bitmap\BMP.cpp">
+      <Filter>src\bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="src_ext\graph.cpp">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
+      <Filter>src\graph</Filter>
     </ClCompile>
-    <ClCompile Include="src_ext\maxflow.cpp">
-      <Filter>Pliki źródłowe</Filter>
+    <ClCompile Include="src\graph\graph.cpp">
+      <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\graph\maxflow.cpp">
+      <Filter>src\graph</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\bitmap\BMP.h">
+      <Filter>src\bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bitmap\RGBAPixel.h">
+      <Filter>src\bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\block.h">
+      <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
+      <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\graph.h">
+      <Filter>src\graph</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
