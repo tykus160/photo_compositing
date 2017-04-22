@@ -27,6 +27,9 @@
     <ClCompile Include="src\graph\maxflow.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\bitmap\BMPUtils.cpp">
+      <Filter>src\bitmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="src\graph\graph.h">
       <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bitmap\BMPUtils.h">
+      <Filter>src\bitmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

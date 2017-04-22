@@ -1,6 +1,5 @@
 #include "cGraphCutOptimizer.h"
 #include <ctime>
-#include <cmath>
 #include <iostream>
 
 void cGraphCutOptimizer::init(cCfgParams &rcCfg, cMatcher *pcMatcher)
@@ -13,25 +12,26 @@ void cGraphCutOptimizer::init(cCfgParams &rcCfg, cMatcher *pcMatcher)
     piAbsOrg = new int[2 * m_uiNumOfLabels + 1];
     piAbs = &piAbsOrg[m_uiNumOfLabels];
 
-    for (int l = 0; l < int(m_uiNumOfLabels); l++) {
+    for (int l = 0; l < int(m_uiNumOfLabels); l++)
+    {
         piAbs[l] = l;
         piAbs[-l] = l;
     }
 
     m_ppbNodesActive = new bool*[m_uiNumOfCams];
     m_ppcNodes = new Graph::node_id*[m_uiNumOfCams];
-    for (unsigned int uiCam = 0; uiCam < m_uiNumOfCams; uiCam++){
+    for (unsigned int uiCam = 0; uiCam < m_uiNumOfCams; uiCam++)
+    {
         m_ppbNodesActive[uiCam] = new bool[m_uiImSize];
         m_ppcNodes[uiCam] = new Graph::node_id[m_uiImSize];
     }
 }
 
 #define IS_BLOCKED(d1,d2) ((d1) < (d2)) //d2 closer
-//#define INFINITY 10000
-#define CrossCostLinear(a,b) (1.0*abs((int)(a)-(int)(b)))
-#define DIST(x1,y1,x2,y2) (sqrt((int)(x1)-(int)(x2))+sqrt((int)(y1)-(int)(y2)));
+#define CrossCostLinear(a,b) (1.0*std::abs((int)(a)-(int)(b)))
+#define DIST(x1,y1,x2,y2) (std::sqrt((int)(x1)-(int)(x2))+std::sqrt((int)(y1)-(int)(y2)))
 
-#define SecondOrderCostLinear(a,b,c) (0.2*abs(2*(double)(b)-(double)(a)-(double)(c)))
+#define SecondOrderCostLinear(a,b,c) (0.2*std::abs(2*(double)(b)-(double)(a)-(double)(c)))
 //For every view keep list of outliers. Dla kazdego punktu lista widaków w których ten punkt najprawdopodobniej jest zas³oniety. Licz wariance na podstawie tylko nie zas³onietych widoków
 
 //Dodaæ WTA na variancji kosztu
