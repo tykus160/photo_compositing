@@ -1,19 +1,19 @@
 #ifndef __BMP_H__
 #define __BMP_H__
 
-#include "RGBAPixel.h"
+#include "RGBPixel.h"
 
 class BMP
 {
 private:
-    RGBAPixel** pixels;
+    RGBPixel** pixels;
     int width;
     int height;
     int length;
 public:
     BMP(char* filename);
     ~BMP();
-    RGBAPixel* operator()(int x, int y);
+    RGBPixel* operator()(int x, int y);
 };
 
 #endif

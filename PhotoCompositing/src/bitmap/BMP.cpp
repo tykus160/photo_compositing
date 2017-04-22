@@ -7,7 +7,7 @@ BMP::BMP(char* filename)
     file->open(filename, std::ios::binary);
     
     length = width * height;
-    pixels = new RGBAPixel*[length];
+    pixels = new RGBPixel*[length];
     for (int i = 0; i < length; ++i)
     {
 
@@ -26,9 +26,9 @@ BMP::~BMP()
     delete [] pixels;
 }
 
-RGBAPixel* BMP::operator()(int x, int y)
+RGBPixel* BMP::operator()(int x, int y)
 {
-    RGBAPixel* result = nullptr;
+    RGBPixel* result = nullptr;
     if (x < width && y < height)
     {
         result = pixels[y * height + x];

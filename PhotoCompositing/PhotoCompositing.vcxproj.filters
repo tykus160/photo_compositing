@@ -27,12 +27,15 @@
     <ClCompile Include="src\graph\maxflow.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\bitmap\BMPUtils.cpp">
+      <Filter>src\bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bitmap\RGBPixel.cpp">
+      <Filter>src\bitmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">
-      <Filter>src\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bitmap\RGBAPixel.h">
       <Filter>src\bitmap</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\block.h">
@@ -43,6 +46,12 @@
     </ClInclude>
     <ClInclude Include="src\graph\graph.h">
       <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bitmap\BMPUtils.h">
+      <Filter>src\bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bitmap\RGBPixel.h">
+      <Filter>src\bitmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
