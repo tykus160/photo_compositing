@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="src\bitmap\BMP.cpp" />
     <ClCompile Include="src\bitmap\BMPUtils.cpp" />
-    <ClCompile Include="src\bitmap\RGBPixel.cpp" />
     <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>

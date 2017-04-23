@@ -30,9 +30,6 @@
     <ClCompile Include="src\bitmap\BMPUtils.cpp">
       <Filter>src\bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="src\bitmap\RGBPixel.cpp">
-      <Filter>src\bitmap</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">

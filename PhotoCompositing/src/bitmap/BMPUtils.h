@@ -3,7 +3,12 @@
 
 namespace BMPUtils
 {
-    const unsigned short BF_TYPE_MB = 0x4D42;
+    const unsigned short BF_TYPE_BM = 0x4D42;
+
+    enum Compression
+    {
+        BI_RGB = 0L
+    };
 
 #pragma pack(2) 
 
@@ -33,7 +38,9 @@ namespace BMPUtils
         unsigned int   biClrImportant;   /* Number of important colors */
     } BITMAPINFOHEADER;
 
-    unsigned char* ReadBmpFromFile(char* szFileName, int& riWidth, int& riHeight);
+    unsigned char* readBmpFromFile(char* szFileName, int& riWidth, int& riHeight);
+
+    void writeBmpToFile(char* szFileName, unsigned char* pRGBSamples, int iWidth, int iHeight);
 }
 
 #endif // !__BMP_UTILS_H__
