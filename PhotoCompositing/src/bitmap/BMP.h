@@ -9,11 +9,24 @@ private:
     RGBPixel** pixels;
     int width;
     int height;
-    int length;
 public:
     BMP(char* filename);
+
     ~BMP();
+
+    void saveToFile(char* filename);
+
     RGBPixel* operator()(int x, int y);
+
+    int getWidth()
+    {
+        return width; 
+    }
+
+    int getHeight()
+    {
+        return height;
+    }
 };
 
 #endif

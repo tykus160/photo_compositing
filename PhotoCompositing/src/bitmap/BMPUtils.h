@@ -37,10 +37,6 @@ namespace BMPUtils
         unsigned int   biClrUsed;        /* Number of colors used */
         unsigned int   biClrImportant;   /* Number of important colors */
     } BITMAPINFOHEADER;
-
-    unsigned char* readBmpFromFile(char* szFileName, int& riWidth, int& riHeight);
-
-    void writeBmpToFile(char* szFileName, unsigned char* pRGBSamples, int iWidth, int iHeight);
 }
 
 #endif // !__BMP_UTILS_H__

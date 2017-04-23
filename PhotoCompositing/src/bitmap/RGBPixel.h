@@ -1,16 +1,14 @@
 #ifndef __RGBPIXEL_H__
 #define __RGBPIXEL_H__
 
-#include <ostream>
+#include "../main.h"
 
 class RGBPixel
 {
 public:
-    char r;
-    char g;
-    char b;
-
-    RGBPixel(char red, char green, char blue, char alpha) : r(red), g(green), b(blue) {}
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
 
     friend bool operator!=(const RGBPixel &a, const RGBPixel &b)
     {
@@ -24,7 +22,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &output, const RGBPixel &D)
     {
-        output << "RGBPixel[red: " << D.r << ", green: " << D.g << ", blue: " << D.b << "]";
+        output << "RGBPixel[red: " << (int) D.r << ", green: " << (int) D.g << ", blue: " << (int) D.b << "]";
         return output;
     }
 };
