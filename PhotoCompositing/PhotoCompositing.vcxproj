@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\bitmap\BMP.cpp" />
-    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
+    <ClCompile Include="src\graph\GraphCutOptimizer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\graph\graph.cpp" />
@@ -32,11 +32,12 @@
     <ClInclude Include="src\bitmap\BMPUtils.h" />
     <ClInclude Include="src\bitmap\RGBPixel.h" />
     <ClInclude Include="src\graph\block.h" />
-    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
+    <ClInclude Include="src\graph\GraphCutOptimizer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\graph\graph.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\matrix\Matrix.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

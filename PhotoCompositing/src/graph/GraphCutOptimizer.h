@@ -1,10 +1,11 @@
-#ifndef __CGRAPHCUTOPTIMIZER_H__
-#define __CGRAPHCUTOPTIMIZER_H__
+#ifndef __GRAPHCUTOPTIMIZER_H__
+#define __GRAPHCUTOPTIMIZER_H__
 
 #include "graph.h"
 
-class cGraphCutOptimizer
+class GraphCutOptimizer
 {
+private:
     int *piAbsOrg;
     int *piAbs;  
     int m_uiNumOfCams = 1;
@@ -21,6 +22,12 @@ public:
                   cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
                   cArray<UInt*> &rapuiDepthLabel,
                   cArray<cYUV<ImagePixelType>*> &rapcYUVMask);
+
+private:
+    static int crossCostLinear(int a, int b)
+    {
+        return std::abs(a - b);
+    }
 };
 
 #endif

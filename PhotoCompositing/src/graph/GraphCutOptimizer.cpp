@@ -1,8 +1,9 @@
-#include "cGraphCutOptimizer.h"
-#include <ctime>
-#include <iostream>
+#include "GraphCutOptimizer.h"
 
-void cGraphCutOptimizer::init(cCfgParams &rcCfg, cMatcher *pcMatcher)
+#include "../main.h"
+#include "../matrix/Matrix.h"
+
+void GraphCutOptimizer::init(cCfgParams &rcCfg, cMatcher *pcMatcher)
 {
     //cOptimizer::init(rcCfg, pcMatcher);
 
@@ -27,16 +28,16 @@ void cGraphCutOptimizer::init(cCfgParams &rcCfg, cMatcher *pcMatcher)
     }
 }
 
-#define IS_BLOCKED(d1,d2) ((d1) < (d2)) //d2 closer
-#define CrossCostLinear(a,b) (1.0*std::abs((int)(a)-(int)(b)))
-#define DIST(x1,y1,x2,y2) (std::sqrt((int)(x1)-(int)(x2))+std::sqrt((int)(y1)-(int)(y2)))
+//#define IS_BLOCKED(d1,d2) ((d1) < (d2)) //d2 closer
+//#define CrossCostLinear(a,b) (1.0*std::abs((int)(a)-(int)(b)))
+//#define DIST(x1,y1,x2,y2) (std::sqrt((int)(x1)-(int)(x2))+std::sqrt((int)(y1)-(int)(y2)))
 
-#define SecondOrderCostLinear(a,b,c) (0.2*std::abs(2*(double)(b)-(double)(a)-(double)(c)))
+//#define SecondOrderCostLinear(a,b,c) (0.2*std::abs(2*(double)(b)-(double)(a)-(double)(c)))
 //For every view keep list of outliers. Dla kazdego punktu lista widaków w których ten punkt najprawdopodobniej jest zas³oniety. Licz wariance na podstawie tylko nie zas³onietych widoków
 
 //Dodaæ WTA na variancji kosztu
 
-void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
+void GraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
                                   cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
                                   cArray<unsigned int*> &rapuiDepthLabel,
                                   cArray<cYUV<ImagePixelType>*> &rapcYUVMask)
@@ -50,7 +51,7 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
     unsigned int Hm1 = m_uiHeight - 1;
 
     double dEnergy;
-    double dOldEnergy = 100000000000000;
+    double dOldEnergy = std::numeric_limits<int>::max();
 
     for (unsigned int uiCycle = 0; uiCycle < uiMaxCycle; uiCycle++)
     {
@@ -63,10 +64,10 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
             std::cout << uiSource << '\t';
             Graph *g = new Graph();
 
-            if (m_LowMem)
-            {
-                m_pcMatcher->precomputeMatchingErrorsOfPlane(rapcYUVInput, rapcCameraParameters, uiSource);
-            }
+            //if (m_LowMem)
+            //{
+            //    m_pcMatcher->precomputeMatchingErrorsOfPlane(rapcYUVInput, rapcCameraParameters, uiSource);
+            //}
 
             dEnergy = 0.0;
 
@@ -100,7 +101,7 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
             //Smoothing term in z domain
             for (unsigned int uiCamId = 0; uiCamId < m_uiNumOfCams; uiCamId++)
             {
-                cMatrix<double> PcIP(4, 4);
+                Matrix<double> PcIP(4, 4);
                 MatrixMultiply(rapcCameraParameters[m_uiCenterCam]->m_mProjMat, rapcCameraParameters[uiCamId]->m_mInvProjMat, PcIP);
 
                 for (unsigned int uiY = 0, uiPos = 0; uiY < m_uiHeight; uiY++)
@@ -145,23 +146,20 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
                             double E00 = 0.0;
                             double E01 = 0.0;
                             double E10 = 0.0;
-                            double E11 = 0.0;
+
                             if (m_ppbNodesActive[uiCamId][uiPos] && m_ppbNodesActive[uiCamId][uiPos + 1])
                             {
-                                E00 = m_dSmoothingCoeff * CrossCostLinear(dZ, dZPlusOne);
+                                E00 = m_dSmoothingCoeff * crossCostLinear(dZ, dZPlusOne);
                             }
                             if (m_ppbNodesActive[uiCamId][uiPos])
                             {
-                                E01 = m_dSmoothingCoeff * CrossCostLinear(dZ, dZSourcePlusOne);
+                                E01 = m_dSmoothingCoeff * crossCostLinear(dZ, dZSourcePlusOne);
                             }
                             if (m_ppbNodesActive[uiCamId][uiPos + 1])
                             {
-                                E10 = m_dSmoothingCoeff * CrossCostLinear(dZSource, dZPlusOne);
+                                E10 = m_dSmoothingCoeff * crossCostLinear(dZSource, dZPlusOne);
                             }
-                            if (true)
-                            {
-                                E11 = m_dSmoothingCoeff * CrossCostLinear(dZSource, dZSourcePlusOne); //0;
-                            }
+                            double E11 = m_dSmoothingCoeff * crossCostLinear(dZSource, dZSourcePlusOne); //0;
 
 
                             if (m_ppbNodesActive[uiCamId][uiPos])
@@ -214,23 +212,21 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
                             double E00 = 0.0;
                             double E01 = 0.0;
                             double E10 = 0.0;
-                            double E11 = 0.0;
+
                             if (m_ppbNodesActive[uiCamId][uiPos] && m_ppbNodesActive[uiCamId][uiPos + m_uiWidth])
                             {
-                                E00 = m_dSmoothingCoeff * CrossCostLinear(dZ, dZPlusOne);
+                                E00 = m_dSmoothingCoeff * crossCostLinear(dZ, dZPlusOne);
                             }
                             if (m_ppbNodesActive[uiCamId][uiPos])
                             {
-                                E01 = m_dSmoothingCoeff * CrossCostLinear(dZ, dZSourcePlusOne);
+                                E01 = m_dSmoothingCoeff * crossCostLinear(dZ, dZSourcePlusOne);
                             }
                             if (m_ppbNodesActive[uiCamId][uiPos + m_uiWidth])
                             {
-                                E10 = m_dSmoothingCoeff * CrossCostLinear(dZSource, dZPlusOne);
+                                E10 = m_dSmoothingCoeff * crossCostLinear(dZSource, dZPlusOne);
                             }
-                            if (true)
-                            {
-                                E11 = m_dSmoothingCoeff * CrossCostLinear(dZSource, dZSourcePlusOne); //0.0
-                            }
+                            double E11 = m_dSmoothingCoeff * crossCostLinear(dZSource, dZSourcePlusOne); //0.0
+
                             if (m_ppbNodesActive[uiCamId][uiPos])
                             {
                                 if (m_ppbNodesActive[uiCamId][uiPos + m_uiWidth])
@@ -261,12 +257,12 @@ void cGraphCutOptimizer::optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
             }
             //*/
 
-            cMatrix<double> IPP(4, 4);
-            cMatrix<double> pix_dst(4, 1);
+            Matrix<double> IPP(4, 4);
+            Matrix<double> pix_dst(4, 1);
 
             //* 
             //InterView Smothness
-            cMatrix<double> PcIP(4, 4);
+            Matrix<double> PcIP(4, 4);
 
             for (unsigned int uiCamId = 0; uiCamId < m_uiNumOfCams; uiCamId++)
             {

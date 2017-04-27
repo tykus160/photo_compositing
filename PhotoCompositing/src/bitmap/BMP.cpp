@@ -13,8 +13,6 @@ BMP::BMP(char* filename)
     char* p_palette = nullptr;
     unsigned short n_colors = 0;
 
-    unsigned char* pRGBBuffer = nullptr;
-
     std::ifstream hfile(filename, std::ios::binary);
 
     if (hfile.is_open())
@@ -27,10 +25,9 @@ BMP::BMP(char* filename)
             height = bih.biHeight;
             int lev = bih.biBitCount;
 
-            pRGBBuffer = new unsigned char[width * height * 3]; //Zaalokowanie odpowiedniego buffora obrazu
             pixels = new RGBPixel*[width * height];
-                                                                    //Za³aduj Palete barw jesli jest
 
+            //Za³aduj Palete barw jesli jest
             if ((lev == 1) || (lev == 4) || (lev == 8))
             {
                 n_colors = 1 << lev;
@@ -59,10 +56,11 @@ BMP::BMP(char* filename)
                     hfile.read(buff, ls);
                     for (int i = 0; i < width; i++)
                     {
-                        pixels[j * width + i] = new RGBPixel;
-                        pixels[j * width + i]->r = p_palette[(buff[i] << 2) + 2];//R
-                        pixels[j * width + i]->g = p_palette[(buff[i] << 2) + 1];//G
-                        pixels[j * width + i]->b = p_palette[(buff[i] << 2) + 0];//B
+                        const int index = j * width + i;
+                        pixels[index] = new RGBPixel;
+                        pixels[index]->r = p_palette[(buff[i] << 2) + 2];//R
+                        pixels[index]->g = p_palette[(buff[i] << 2) + 1];//G
+                        pixels[index]->b = p_palette[(buff[i] << 2) + 0];//B
                     }
                 };
                 break;
@@ -74,10 +72,11 @@ BMP::BMP(char* filename)
                     hfile.read(buff, ls);
                     for (int i = 0, l = 0; i < width; i++, l += 3)
                     {
-                        pixels[j * width + i] = new RGBPixel;
-                        pixels[j * width + i]->b = buff[l + 0];
-                        pixels[j * width + i]->g = buff[l + 1];
-                        pixels[j * width + i]->r = buff[l + 2];
+                        const int index = j * width + i;
+                        pixels[index] = new RGBPixel;
+                        pixels[index]->b = buff[l + 0];
+                        pixels[index]->g = buff[l + 1];
+                        pixels[index]->r = buff[l + 2];
                     };
                 };
                 break;
@@ -88,19 +87,18 @@ BMP::BMP(char* filename)
                     hfile.read(buff, width * 4);
                     for (int i = 0, l = 0; i < width; i++, l += 4)
                     {
-                        pixels[j * width + i] = new RGBPixel;
-                        pixels[j * width + i]->b = buff[l + 0];
-                        pixels[j * width + i]->g = buff[l + 1];
-                        pixels[j * width + i]->r = buff[l + 2];
+                        const int index = j * width + i;
+                        pixels[index] = new RGBPixel;
+                        pixels[index]->b = buff[l + 0];
+                        pixels[index]->g = buff[l + 1];
+                        pixels[index]->r = buff[l + 2];
                     }
                 };
                 break;
             };
+
             delete buff;
-            if (p_palette != nullptr)
-            {
-                delete p_palette;
-            }
+            delete p_palette;
         }
         hfile.close();
     }
@@ -133,7 +131,7 @@ void BMP::saveToFile(char* filename)
         bih.biHeight = height;
         bih.biPlanes = 1;
         bih.biBitCount = 24;
-        bih.biCompression = BMPUtils::BI_RGB;
+        bih.biCompression = 0;
         bih.biSizeImage = 0;
         bih.biXPelsPerMeter = 0;
         bih.biYPelsPerMeter = 0;
@@ -149,9 +147,10 @@ void BMP::saveToFile(char* filename)
         {
             for (int i = 0, l = 0; i < width; i++, l += 3)
             {
-                buff[l + 0] = pixels[j * width + i]->b;
-                buff[l + 1] = pixels[j * width + i]->g;
-                buff[l + 2] = pixels[j * width + i]->r;
+                const int index = j * width + i;
+                buff[l + 0] = pixels[index]->b;
+                buff[l + 1] = pixels[index]->g;
+                buff[l + 2] = pixels[index]->r;
             }
             hfile.write(buff, ls);
         }
@@ -166,7 +165,7 @@ BMP::~BMP()
     {
         delete pixels[i];
     }
-    delete[] pixels;
+    delete [] pixels;
 }
 
 RGBPixel* BMP::operator()(int x, int y)
@@ -174,7 +173,7 @@ RGBPixel* BMP::operator()(int x, int y)
     RGBPixel* result = nullptr;
     if (x < width && y < height)
     {
-        result = pixels[y * height + x];
+        result = pixels[y * width + x];
     }
     return result;
 }

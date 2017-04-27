@@ -5,11 +5,6 @@ namespace BMPUtils
 {
     const unsigned short BF_TYPE_BM = 0x4D42;
 
-    enum Compression
-    {
-        BI_RGB = 0L
-    };
-
 #pragma pack(2) 
 
     typedef struct                       /**** BMP file header structure ****/

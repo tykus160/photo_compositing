@@ -6,5 +6,8 @@
  */
 #include <iostream>
 #include <fstream>
+#include <ctime>
+#include <limits>
+#include <vector>
 
 #endif // !__MAIN_H__
