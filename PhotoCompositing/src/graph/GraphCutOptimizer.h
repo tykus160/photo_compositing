@@ -17,17 +17,10 @@ private:
 
     //cArray<cMatrix<MatrixComputationalType>*> m_apmatIPP;
 public:
-    void init(cCfgParams &rcCfg, cMatcher* pcMatcher);
-    void optimize(cArray<cYUV<ImagePixelType>*> &rapcYUVInput,
-                  cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
+    void init(cMatcher* pcMatcher);
+    void optimize(cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
                   cArray<UInt*> &rapuiDepthLabel,
                   cArray<cYUV<ImagePixelType>*> &rapcYUVMask);
-
-private:
-    static int crossCostLinear(int a, int b)
-    {
-        return std::abs(a - b);
-    }
 };
 
 #endif

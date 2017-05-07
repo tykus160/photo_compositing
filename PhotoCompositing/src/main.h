@@ -10,4 +10,6 @@
 #include <limits>
 #include <vector>
 
+#define PRINT_DEBUG true
+
 #endif // !__MAIN_H__

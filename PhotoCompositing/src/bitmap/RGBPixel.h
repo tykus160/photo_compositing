@@ -5,26 +5,21 @@
 
 class RGBPixel
 {
+private:
+    static const double WEIGHT_R;
+    static const double WEIGHT_G;
+    static const double WEIGHT_B;
+
 public:
     unsigned char r;
     unsigned char g;
     unsigned char b;
 
-    friend bool operator!=(const RGBPixel &a, const RGBPixel &b)
-    {
-        return !(a == b);
-    }
+    unsigned char getIntensity();
 
-    friend bool operator==(const RGBPixel &a, const RGBPixel &b)
-    {
-        return a.r == b.r && a.g == b.g && a.b == b.b;
-    }
-
-    friend std::ostream &operator<<(std::ostream &output, const RGBPixel &D)
-    {
-        output << "RGBPixel[red: " << (int) D.r << ", green: " << (int) D.g << ", blue: " << (int) D.b << "]";
-        return output;
-    }
+    friend bool operator!=(const RGBPixel &a, const RGBPixel &b);
+    friend bool operator==(const RGBPixel &a, const RGBPixel &b);
+    friend std::ostream& operator<<(std::ostream &output, const RGBPixel &D);
 };
 
 #endif

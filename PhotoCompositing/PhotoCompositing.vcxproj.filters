@@ -30,6 +30,9 @@
     <ClCompile Include="src\graph\GraphCutOptimizer.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\bitmap\RGBPixel.cpp">
+      <Filter>src\bitmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="src\matrix\Matrix.h">
       <Filter>src\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\CostFunctions.h">
+      <Filter>src\graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

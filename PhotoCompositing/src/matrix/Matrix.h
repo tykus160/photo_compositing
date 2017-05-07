@@ -33,7 +33,7 @@ public:
 
     T& at(unsigned int row, unsigned int col)
     {
-        return mMatrix[row][col];
+        return mMatrix.at(row).at(col);
     }
 
     T& operator()(unsigned int row, unsigned int col)
