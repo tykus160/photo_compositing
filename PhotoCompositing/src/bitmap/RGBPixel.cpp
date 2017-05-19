@@ -5,6 +5,8 @@ const double RGBPixel::WEIGHT_R = 0.2989;
 const double RGBPixel::WEIGHT_G = 0.5870;
 const double RGBPixel::WEIGHT_B = 0.1140;
 
+const unsigned char RGBPixel::MAX_VALUE = 255;
+
 unsigned char RGBPixel::getIntensity()
 {
     return (unsigned char) (RGBPixel::WEIGHT_R * r + RGBPixel::WEIGHT_G * g + RGBPixel::WEIGHT_B * b);

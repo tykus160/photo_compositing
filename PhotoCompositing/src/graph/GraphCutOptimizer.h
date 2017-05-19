@@ -19,8 +19,7 @@ private:
 public:
     void init(cMatcher* pcMatcher);
     void optimize(cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
-                  cArray<UInt*> &rapuiDepthLabel,
-                  cArray<cYUV<ImagePixelType>*> &rapcYUVMask);
+                  cArray<UInt*> &rapuiDepthLabel);
 };
 
 #endif

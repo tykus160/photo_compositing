@@ -33,6 +33,9 @@
     <ClCompile Include="src\bitmap\RGBPixel.cpp">
       <Filter>src\bitmap</Filter>
     </ClCompile>
+    <ClCompile Include="src\graph\Mask.cpp">
+      <Filter>src\graph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">
@@ -60,6 +63,9 @@
       <Filter>src\matrix</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\CostFunctions.h">
+      <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\Mask.h">
       <Filter>src\graph</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,9 @@
 #include "GraphCutOptimizer.h"
 
-#include "../main.h"
+#include <ctime>
+#include <iostream>
+#include <limits>
+
 #include "../matrix/Matrix.h"
 #include "CostFunctions.h"
 
@@ -28,8 +31,7 @@ void GraphCutOptimizer::init(cMatcher *pcMatcher)
 }
 
 void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
-                                 cArray<unsigned int*> &rapuiDepthLabel,
-                                 cArray<cYUV<ImagePixelType>*> &rapcYUVMask)
+                                 cArray<unsigned int*> &rapuiDepthLabel)
 {
     std::cout << "Graph Cut" << std::endl;
 
@@ -59,15 +61,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
             {
                 for (pp = 0; pp < m_uiImSize; pp++)
                 {
-
-#if INPUT_MASK
-                    if (rapcYUVMask[uiCam]->m_atY[pp] == 0)
-                    {
-                        m_ppcNodes[uiCam][pp] = nullptr;
-                        m_ppbNodesActive[uiCam][pp] = false;
-                        continue;
-                    }
-#endif
                     if (rapuiDepthLabel[uiCam][pp] == uiSource)
                     {
                         m_ppcNodes[uiCam][pp] = nullptr;
@@ -106,10 +99,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
                         double dZSource = 1/dInvZ;
 #endif
                         //Horizontal
-
-#if INPUT_MASK
-                        if (rapcYUVMask[uiCamId]->m_atY[uiPos] != 0 || rapcYUVMask[uiCamId]->m_atY[uiPos + 1] != 0)
-#endif
 
                         if (uiX < m_uiWidth - 1)
                         {
@@ -172,10 +161,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
                         }
 
                         //Vertical
-
-#if INPUT_MASK
-                        if (rapcYUVMask[uiCamId]->m_atY[uiPos] != 0 || rapcYUVMask[uiCamId]->m_atY[uiPos + m_uiWidth] != 0)
-#endif
 
                         if (uiY < m_uiHeight - 1)
                         {
@@ -310,13 +295,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
                                         double Ea0 = 0;
                                         double E0a = 0;
 
-#if INPUT_MASK
-                                        if (rapcYUVMask[uiCamId]->m_atY[uiPos] == 0 || rapcYUVMask[uiCamTargetId]->m_atY[uiPixelPositionInTargetView] == 0)
-                                        {
-                                            continue;
-                                        }
-#endif
-
                                         if ((m_ppbNodesActive[uiCamId][uiPos] == true) && (m_ppbNodesActive[uiCamTargetId][uiPixelPositionInTargetView] == true))
                                         {
                                             g->add_term2(m_ppcNodes[uiCamId][uiPos], m_ppcNodes[uiCamTargetId][uiPixelPositionInTargetView], E00, E0a, Ea0, Eaa);
@@ -351,13 +329,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
                                     double E0a = 0;
                                     double Ea0 = 0;
                                     double Eaa = fmin(m_pcMatcher->matchingError(rapuiDepthLabel, rapcCameraParameters, uiCamId, uiCamTargetId, uiX, uiY, uiSource) - 20, 0);
-
-#if INPUT_MASK
-                                    if (rapcYUVMask[uiCamId]->m_atY[uiPos] == 0 || rapcYUVMask[uiCamTargetId]->m_atY[uiPixelPositionInTargetView] == 0)
-                                    {
-                                        continue;
-                                    }
-#endif
 
                                     if (m_ppbNodesActive[uiCamId][uiPos] == true)
                                     {
@@ -398,14 +369,6 @@ void GraphCutOptimizer::optimize(cArray<cCamParams<MatrixComputationalType>*> &r
                 {
                     for (unsigned int uiCamId = 0; uiCamId < m_uiNumOfCams; uiCamId++)
                     {
-
-#if INPUT_MASK
-                        if (rapcYUVMask[uiCamId]->m_atY[uiPos] == 0)
-                        {
-                            continue;
-                        }
-#endif
-
                         if (m_ppbNodesActive[uiCamId][uiPos] == true)
                         {
                             if (g->what_segment(m_ppcNodes[uiCamId][uiPos]) != Graph::SOURCE)

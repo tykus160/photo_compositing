@@ -1,6 +1,6 @@
 #include "BMP.h"
 
-#include "../main.h"
+#include <fstream>
 #include "BMPUtils.h"
 
 BMP::BMP(char* filename)

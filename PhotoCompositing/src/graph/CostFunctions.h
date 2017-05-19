@@ -1,8 +1,6 @@
 #ifndef __COST_FUNCTIONS_H__
 #define __COST_FUNCTIONS_H__
 
-#include "../main.h"
-
 namespace CostFunctions
 {
     int crossCostLinear(int a, int b)
