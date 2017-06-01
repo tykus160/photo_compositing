@@ -1,10 +1,13 @@
-#include "main.h"
+#include <iostream>
 
 #include "bitmap/RGBPixel.h"
 #include "bitmap/BMP.h"
 #include "matrix/Matrix.h"
 
 #include "graph/graph.h"
+
+#include "graph/Mask.h"
+#include "graph/GraphCutOptimizer.h"
 
 void graphTest();
 
@@ -40,9 +43,16 @@ int main(int argc, char** argv)
             }
         }
         std::cout << "Red: " << numOfRed << ", Green: " << numOfGreen << ", Blue: " << numOfBlue << std::endl;
+
+        Mask mask(&bitmap);
+        mask.createLabels();
+        std::cout << mask << std::endl;
     }
+
+    GraphCutOptimizer opt(2);
+    opt.optimize();
     
-    graphTest();
+    //graphTest();
 
     std::cout << "Press enter to close..." << std::endl;
     std::cin.get();

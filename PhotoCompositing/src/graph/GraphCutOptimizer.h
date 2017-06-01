@@ -1,25 +1,24 @@
-#ifndef __GRAPHCUTOPTIMIZER_H__
-#define __GRAPHCUTOPTIMIZER_H__
+#ifndef __GRAPH_CUT_OPTIMIZER_H__
+#define __GRAPH_CUT_OPTIMIZER_H__
 
 #include "graph.h"
+#include "../bitmap/BMP.h"
+#include "Mask.h"
 
 class GraphCutOptimizer
 {
 private:
-    int *piAbsOrg;
-    int *piAbs;  
-    int m_uiNumOfCams = 1;
-    unsigned int m_uiHorizontalPrecision;
-    unsigned int m_uiVerticalPrecision;
-
-    bool **m_ppbNodesActive;
-    Graph::node_id **m_ppcNodes;
-
-    //cArray<cMatrix<MatrixComputationalType>*> m_apmatIPP;
+    Graph::node_id mNodes;
+    unsigned int mCapacity;
+    unsigned int mActualLength = 0;
+    BMP** mLabels;
+    Mask* mMask;
+    
 public:
-    void init(cMatcher* pcMatcher);
-    void optimize(cArray<cCamParams<MatrixComputationalType>*> &rapcCameraParameters,
-                  cArray<UInt*> &rapuiDepthLabel);
+    GraphCutOptimizer(unsigned int capacity);
+    void addLabel(BMP* bitmap);
+    void addMask(Mask* mask);
+    void optimize();
 };
 
-#endif
+#endif // !__GRAPH_CUT_OPTIMIZER_H__

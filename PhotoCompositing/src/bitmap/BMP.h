@@ -16,7 +16,11 @@ public:
 
     void saveToFile(char* filename);
 
+    RGBPixel* get(int x, int y);
+
     RGBPixel* operator()(int x, int y);
+
+    int getCoordinatesAsIndex(int x, int y);
 
     int getWidth()
     {

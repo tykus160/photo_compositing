@@ -27,15 +27,16 @@
     <ClCompile Include="src\graph\maxflow.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
-    <ClCompile Include="src\graph\GraphCutOptimizer.cpp">
-      <Filter>src\graph</Filter>
-    </ClCompile>
     <ClCompile Include="src\bitmap\RGBPixel.cpp">
       <Filter>src\bitmap</Filter>
     </ClCompile>
     <ClCompile Include="src\graph\Mask.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
+      <Filter>src\graph</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graph\GraphCutOptimizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bitmap\BMP.h">
@@ -53,12 +54,6 @@
     <ClInclude Include="src\bitmap\RGBPixel.h">
       <Filter>src\bitmap</Filter>
     </ClInclude>
-    <ClInclude Include="src\main.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graph\GraphCutOptimizer.h">
-      <Filter>src\graph</Filter>
-    </ClInclude>
     <ClInclude Include="src\matrix\Matrix.h">
       <Filter>src\matrix</Filter>
     </ClInclude>
@@ -68,5 +63,9 @@
     <ClInclude Include="src\graph\Mask.h">
       <Filter>src\graph</Filter>
     </ClInclude>
+    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
+      <Filter>src\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph\GraphCutOptimizer.h" />
   </ItemGroup>
 </Project>

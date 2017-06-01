@@ -168,7 +168,7 @@ BMP::~BMP()
     delete [] pixels;
 }
 
-RGBPixel* BMP::operator()(int x, int y)
+RGBPixel* BMP::get(int x, int y)
 {
     RGBPixel* result = nullptr;
     if (x < width && y < height)
@@ -176,4 +176,14 @@ RGBPixel* BMP::operator()(int x, int y)
         result = pixels[y * width + x];
     }
     return result;
+}
+
+RGBPixel* BMP::operator()(int x, int y)
+{
+    return get(x, y);
+}
+
+int BMP::getCoordinatesAsIndex(int x, int y)
+{
+    return y * width + x;
 }
