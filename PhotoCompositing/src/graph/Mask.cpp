@@ -31,6 +31,6 @@ int Mask::getLength()
 
 std::ostream& operator<<(std::ostream &output, const Mask &D)
 {
-    output << "Mask[numOfFields red: " << D.mRedFields.size() << ", green : " << D.mGreenFields.size() << "]";
+    output << "Mask[numOfFields red: " << D.mRedFields.size() << ", green: " << D.mGreenFields.size() << "]";
     return output;
 }

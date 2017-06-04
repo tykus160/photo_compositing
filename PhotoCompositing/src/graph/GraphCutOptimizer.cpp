@@ -1,10 +1,10 @@
 #include "GraphCutOptimizer.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #ifdef DEBUG_TIME
 #include <chrono>
-#include <iostream>
 #endif // DEBUG_TIME
 
 GraphCutOptimizer::GraphCutOptimizer(unsigned int capacity)
@@ -22,6 +22,10 @@ void GraphCutOptimizer::addLabel(BMP* bitmap)
     if (mActualLength < mCapacity)
     {
         mLabels[mActualLength++] = bitmap;
+    }
+    else
+    {
+        std::cout << "You cannot add more labels." << std::endl;
     }
 }
 
@@ -50,17 +54,35 @@ void GraphCutOptimizer::optimize()
     double dEnergy;
     double dOldEnergy = 100000; // almost infinity!
 
-    Graph* graph = new Graph();
+    for (int label = 0; label < mCapacity; ++label)
+    {
+        dEnergy = 0.0;
 
-    // There should be something here, I assume :(
 
-    graph->maxflow();
+        Graph* graph = new Graph();
 
-    delete graph;
+        // There should be something here, I assume :(
+
+        const auto flow = graph->maxflow();
+        dEnergy += flow;
+
+        std::cout << "Energy for " << label << " label: " << dEnergy << std::endl;
+        if (dEnergy < dOldEnergy)
+        {
+            // TODO more logic here
+            dOldEnergy = dEnergy;
+        }
+        else
+        {
+            std::cout << "Something went terribly wrong!" << std::endl;
+        }
+
+        delete graph;
+    }    
 
 #ifdef DEBUG_TIME
     auto t2 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds> (t2 - t1).count();
     std::cout << "This optimization took " << duration << " seconds." << std::endl;
 #endif // DEBUG_TIME
 }

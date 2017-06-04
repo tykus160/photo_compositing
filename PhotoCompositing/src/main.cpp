@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "ErrorCodes.h"
+
 #include "bitmap/RGBPixel.h"
 #include "bitmap/BMP.h"
 #include "matrix/Matrix.h"
@@ -10,6 +12,7 @@
 #include "graph/GraphCutOptimizer.h"
 
 void graphTest();
+void endMessage();
 
 int main(int argc, char** argv)
 {
@@ -17,45 +20,32 @@ int main(int argc, char** argv)
 
     if (argc >= 2)
     {
-        std::cout << "Loading file: " << argv[1] << std::endl;
-        BMP bitmap(argv[1]);
-        
-        int numOfRed = 0;
-        int numOfGreen = 0;
-        int numOfBlue = 0;
-        for (int j = 0; j < bitmap.getHeight(); ++j)
+        try
         {
-            for (int i = 0; i < bitmap.getWidth(); ++i)
-            {
-                RGBPixel* px = bitmap(i, j);
-                if (px->isBlue())
-                {
-                    ++numOfBlue;
-                }
-                else if (px->isGreen())
-                {
-                    ++numOfGreen;
-                }
-                else if (px->isRed())
-                {
-                    ++numOfRed;
-                }
-            }
+            std::cout << "Loading file: " << argv[1] << std::endl;
+            BMP bitmap(argv[1]);
+
+            Mask mask(&bitmap);
+            mask.createLabels();
+            std::cout << mask << std::endl;
+
+            GraphCutOptimizer opt(2);
+            opt.addLabel(&bitmap);
+            opt.addLabel(&bitmap);
+            opt.addMask(&mask);
+            opt.optimize();
         }
-        std::cout << "Red: " << numOfRed << ", Green: " << numOfGreen << ", Blue: " << numOfBlue << std::endl;
-
-        Mask mask(&bitmap);
-        mask.createLabels();
-        std::cout << mask << std::endl;
+        catch (std::runtime_error& e)
+        {
+            std::cout << e.what() << std::endl;
+            endMessage();
+            return ErrorCodes::WRONG_INPUT_FILE;
+        }
     }
-
-    GraphCutOptimizer opt(2);
-    opt.optimize();
     
     //graphTest();
 
-    std::cout << "Press enter to close..." << std::endl;
-    std::cin.get();
+    endMessage();
 }
 
 // Example from graphcut lib
@@ -84,4 +74,10 @@ void graphTest()
         printf("node1 is in the SINK set\n");
 
     delete g;
+}
+
+void endMessage()
+{
+    std::cout << "Press enter to close..." << std::endl;
+    std::cin.get();
 }

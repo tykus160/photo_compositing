@@ -34,6 +34,7 @@
     <ClInclude Include="src\bitmap\BMP.h" />
     <ClInclude Include="src\bitmap\BMPUtils.h" />
     <ClInclude Include="src\bitmap\RGBPixel.h" />
+    <ClInclude Include="src\ErrorCodes.h" />
     <ClInclude Include="src\graph\block.h" />
     <ClInclude Include="src\graph\CostFunctions.h" />
     <ClInclude Include="src\graph\cGraphCutOptimizer.h">

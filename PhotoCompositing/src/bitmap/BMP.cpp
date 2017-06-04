@@ -1,25 +1,28 @@
 #include "BMP.h"
 
 #include <fstream>
+#include <stdexcept>
+
 #include "BMPUtils.h"
 
 BMP::BMP(char* filename)
 {
-    BMPUtils::BITMAPFILEHEADER bfh;
-    BMPUtils::BITMAPINFOHEADER bih;
-
-    char* buff = nullptr;
-
-    char* p_palette = nullptr;
-    unsigned short n_colors = 0;
-
     std::ifstream hfile(filename, std::ios::binary);
 
     if (hfile.is_open())
     {
+        BMPUtils::BITMAPFILEHEADER bfh;
         hfile.read((char*) &bfh, sizeof(bfh));
-        if (!(bfh.bfType != BMPUtils::BF_TYPE_BM || (bfh.bfOffBits < (sizeof(BMPUtils::BITMAPFILEHEADER) + sizeof(BMPUtils::BITMAPINFOHEADER)))))
+        if (!(bfh.bfType != BMPUtils::BF_TYPE_BM ||
+            (bfh.bfOffBits < sizeof(BMPUtils::BITMAPFILEHEADER) + sizeof(BMPUtils::BITMAPINFOHEADER))))
         {
+            BMPUtils::BITMAPINFOHEADER bih;
+
+            char* buff = nullptr;
+
+            char* p_palette = nullptr;
+            unsigned short n_colors = 0;
+
             hfile.read((char*) &bih, sizeof(bih));
             width = bih.biWidth;
             height = bih.biHeight;
@@ -28,7 +31,7 @@ BMP::BMP(char* filename)
             pixels = new RGBPixel*[width * height];
 
             //Za³aduj Palete barw jesli jest
-            if ((lev == 1) || (lev == 4) || (lev == 8))
+            if (lev == 1 || lev == 4 || lev == 8)
             {
                 n_colors = 1 << lev;
                 p_palette = new char[4 * n_colors];
@@ -51,7 +54,7 @@ BMP::BMP(char* filename)
                 break;
             case 8: //Skala szaroœci
                 ls = (width + 3) & 0xFFFFFFFC;
-                for (int j = (height - 1); j >= 0; j--)
+                for (int j = height - 1; j >= 0; j--)
                 {
                     hfile.read(buff, ls);
                     for (int i = 0; i < width; i++)
@@ -67,7 +70,7 @@ BMP::BMP(char* filename)
             case 24:
                 //bitmapa RGB
                 ls = (width * 3 + 3) & 0xFFFFFFFC;
-                for (int j = (height - 1); j >= 0; j--)
+                for (int j = height - 1; j >= 0; j--)
                 {
                     hfile.read(buff, ls);
                     for (int i = 0, l = 0; i < width; i++, l += 3)
@@ -82,7 +85,7 @@ BMP::BMP(char* filename)
                 break;
             case 32:
                 // RGBA bitmap 
-                for (int j = (height - 1); j >= 0; j--)
+                for (int j = height - 1; j >= 0; j--)
                 {
                     hfile.read(buff, width * 4);
                     for (int i = 0, l = 0; i < width; i++, l += 4)
@@ -100,28 +103,36 @@ BMP::BMP(char* filename)
             delete buff;
             delete p_palette;
         }
+        else
+        {
+            throw std::runtime_error("file is not supported bmp");
+        }
         hfile.close();
+    }
+    else
+    {
+        throw std::runtime_error("file is not supported bmp or is being interpreted by another program");
     }
 }
 
 void BMP::saveToFile(char* filename)
 {
-    BMPUtils::BITMAPFILEHEADER bfh;
-    BMPUtils::BITMAPINFOHEADER bih;
-    char* buff;
-    unsigned int ls, fb = 0;//w
-
-    if ((width) % 4 != 0)
-    {
-        fb = 4 - (((width) * 3) % 4);
-    }
-
     std::ofstream hfile(filename, std::ios::binary);
 
     if (hfile.is_open() && pixels != nullptr)
     {
+        BMPUtils::BITMAPFILEHEADER bfh;
+        BMPUtils::BITMAPINFOHEADER bih;
+        char* buff;
+        unsigned int ls, fb = 0;
+
+        if (width % 4 != 0)
+        {
+            fb = 4 - ((width * 3) % 4);
+        }
+
         bfh.bfType = BMPUtils::BF_TYPE_BM;
-        bfh.bfSize = ((3 * (width) +fb)*(height)) + sizeof(bih);
+        bfh.bfSize = (3 * width + fb) * height + sizeof(bih);
         bfh.bfReserved1 = 0;
         bfh.bfReserved2 = 0;
         bfh.bfOffBits = sizeof(BMPUtils::BITMAPFILEHEADER) + sizeof(BMPUtils::BITMAPINFOHEADER);
@@ -141,7 +152,7 @@ void BMP::saveToFile(char* filename)
         hfile.write((char*) &bfh, sizeof(bfh));
         hfile.write((char*) &bih, sizeof(bih));
 
-        ls = ((width) * 3 + 3) & 0xFFFFFFFC;
+        ls = (width * 3 + 3) & 0xFFFFFFFC;
         buff = new char[ls];
         for (int j = (height - 1); j >= 0; j--)
         {
@@ -156,6 +167,10 @@ void BMP::saveToFile(char* filename)
         }
         delete buff;
         hfile.close();
+    }
+    else
+    {
+        throw std::runtime_error("cannot save bitmap to file");
     }
 }
 

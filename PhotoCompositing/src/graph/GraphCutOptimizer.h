@@ -12,7 +12,7 @@ private:
     unsigned int mCapacity;
     unsigned int mActualLength = 0;
     BMP** mLabels;
-    Mask* mMask;
+    Mask* mMask = nullptr;
     
 public:
     GraphCutOptimizer(unsigned int capacity);
