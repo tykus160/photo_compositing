@@ -8,11 +8,15 @@
 class GraphCutOptimizer
 {
 private:
-    Graph::node_id mNodes;
+    Graph::node_id** mNodes;
+    bool** mNodesActive;
     unsigned int mCapacity;
     unsigned int mActualLength = 0;
     BMP** mLabels;
     Mask* mMask = nullptr;
+
+    /** Called at the beginning of optimize() */
+    void init();
     
 public:
     GraphCutOptimizer(unsigned int capacity);

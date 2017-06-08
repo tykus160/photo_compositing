@@ -1,3 +1,11 @@
+/*
+ * Self-automatic image compositing using Graph Cut optimization.
+ * Program input:
+ * - 1st arg - path to prepared mask
+ * - next args - paths to images which would take participance in optimization
+ *
+ * author: W.Tyczynski
+ */
 #include <iostream>
 
 #include "ErrorCodes.h"
@@ -6,12 +14,9 @@
 #include "bitmap/BMP.h"
 #include "matrix/Matrix.h"
 
-#include "graph/graph.h"
-
 #include "graph/Mask.h"
 #include "graph/GraphCutOptimizer.h"
 
-void graphTest();
 void endMessage();
 
 int main(int argc, char** argv)
@@ -27,7 +32,6 @@ int main(int argc, char** argv)
 
             Mask mask(&bitmap);
             mask.createLabels();
-            std::cout << mask << std::endl;
 
             GraphCutOptimizer opt(2);
             opt.addLabel(&bitmap);
@@ -42,13 +46,12 @@ int main(int argc, char** argv)
             return ErrorCodes::WRONG_INPUT_FILE;
         }
     }
-    
-    //graphTest();
 
     endMessage();
 }
 
 // Example from graphcut lib
+/*
 void graphTest()
 {
     Graph::node_id nodes[2];
@@ -75,6 +78,7 @@ void graphTest()
 
     delete g;
 }
+*/
 
 void endMessage()
 {

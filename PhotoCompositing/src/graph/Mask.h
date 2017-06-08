@@ -1,23 +1,23 @@
 #ifndef __MASK_H__
 #define __MASK_H__
 
-#include <list>
-#include <ostream>
+#include <vector>
 
 #include "../bitmap/BMP.h"
 
 class Mask
 {
 private:
+    static const int NO_LABEL;
+
     BMP* mBitmap;
-    std::list<int> mRedFields;
-    std::list<int> mGreenFields;
+    std::vector<int> mLabels;
 
 public:
     Mask(BMP* bitmap);
     void createLabels();
     int getLength();
-    friend std::ostream& operator<<(std::ostream &output, const Mask &D);
+    int getLabelAtIndex(int index);
 };
 
 #endif // !__MASK_H__

@@ -1,5 +1,9 @@
 #include "Mask.h"
 
+#include<iostream>
+
+const int Mask::NO_LABEL = -1;
+
 Mask::Mask(BMP* bitmap) :
     mBitmap(bitmap)
 {
@@ -7,6 +11,8 @@ Mask::Mask(BMP* bitmap) :
 
 void Mask::createLabels()
 {
+    mLabels.resize(getLength(), NO_LABEL);
+
     for (int j = 0; j < mBitmap->getHeight(); ++j)
     {
         for (int i = 0; i < mBitmap->getWidth(); ++i)
@@ -14,23 +20,22 @@ void Mask::createLabels()
             RGBPixel* pixel = mBitmap->get(i, j);
             if (pixel->isRed())
             {
-                mRedFields.push_back(mBitmap->getCoordinatesAsIndex(i, j));
+                mLabels.at(mBitmap->getCoordinatesAsIndex(i, j)) = 0;
             }
             else if (pixel->isGreen())
             {
-                mGreenFields.push_back(mBitmap->getCoordinatesAsIndex(i, j));
+                mLabels.at(mBitmap->getCoordinatesAsIndex(i, j)) = 1;
             }
         }
     }
 }
 
+int Mask::getLabelAtIndex(int index)
+{
+    return mLabels.at(index);
+}
+
 int Mask::getLength()
 {
     return mBitmap->getWidth() * mBitmap->getHeight();
-}
-
-std::ostream& operator<<(std::ostream &output, const Mask &D)
-{
-    output << "Mask[numOfFields red: " << D.mRedFields.size() << ", green: " << D.mGreenFields.size() << "]";
-    return output;
 }
