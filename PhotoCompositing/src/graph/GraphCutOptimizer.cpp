@@ -14,14 +14,14 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int capacity)
         throw std::invalid_argument("capacity must be greater than 0");
     }
     mCapacity = capacity;
-    mLabels = new BMP*[mCapacity];
+    mLabels = new Image*[mCapacity];
 }
 
-void GraphCutOptimizer::addLabel(BMP* bitmap)
+void GraphCutOptimizer::addLabel(Image* image)
 {
     if (mActualLength < mCapacity)
     {
-        mLabels[mActualLength++] = bitmap;
+        mLabels[mActualLength++] = image;
     }
     else
     {
@@ -76,15 +76,13 @@ void GraphCutOptimizer::optimize()
         // Preparation - creating nodes
         for (int i = 0; i < mMask->getLength(); ++i)
         {
-            if (label == mMask->getLabelAtIndex(i))
+            if (label == mMask->getLabelAtIndex(i)) // not active
             {
-                // not active
                 mNodesActive[label][i] = false;
                 mNodes[label][i] = nullptr;
             }
-            else
+            else // active
             {
-                // active
                 mNodesActive[label][i] = true;
                 mNodes[label][i] = graph->add_node();
             }
@@ -92,18 +90,121 @@ void GraphCutOptimizer::optimize()
 
         // add cost functions here
 
+        for (int y = 0; y < mLabels[label]->getHeight(); ++y)
+        {
+            for (int x = 0; x < mLabels[label]->getWidth(); ++x)
+            {
+                int index = mLabels[label]->getCoordinatesAsIndex(x, y);
+                if (x < mLabels[label]->getWidth() - 1) // HORIZONTAL
+                {
+                    double E00 = 0;
+                    double E01 = 0;
+                    double E10 = 0;
+
+                    if (mNodesActive[label][index] && mNodesActive[label][index + 1])
+                    {
+                        //E00 =
+                    }
+                    if (mNodesActive[label][index])
+                    {
+                        //E01 =
+                    }
+                    if (mNodesActive[label][index + 1])
+                    {
+                        //E10 =
+                    }
+                    double E11 = 0; // sth else
+
+                    if (mNodesActive[label][index])
+                    {
+                        if (mNodesActive[label][index + 1])
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        if (mNodesActive[label][index + 1])
+                        {
+
+                        }
+                        else
+                        {
+                            // Nothing to add
+                            dEnergy += E11;
+                        }
+                    }
+
+                }
+
+                if (y < mLabels[label]->getHeight() - 1) // VERTICAL
+                {
+                    int width = mLabels[label]->getWidth();
+
+                    double E00 = 0;
+                    double E01 = 0;
+                    double E10 = 0;
+                    
+                    if (mNodesActive[label][index] && mNodesActive[label][index + width])
+                    {
+                        //E00 =
+                    }
+                    if (mNodesActive[label][index])
+                    {
+                        //E01 =
+                    }
+                    if (mNodesActive[label][index + width])
+                    {
+                        //E10 =
+                    }
+                    double E11 = 0; // sth else
+
+                    if (mNodesActive[label][index])
+                    {
+                        if (mNodesActive[label][index + 1])
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        if (mNodesActive[label][index + 1])
+                        {
+
+                        }
+                        else
+                        {
+                            // Nothing to add
+                            dEnergy += E11;
+                        }
+                    }
+                }
+            }
+        }
+
         const auto flow = graph->maxflow();
         dEnergy += flow;
 
         std::cout << "Energy for label " << label << ": " << dEnergy << std::endl;
+        std::cout << "Old energy for label: " << dOldEnergy << std::endl;
+
         if (dEnergy < dOldEnergy)
         {
             // TODO more logic here
+            for (int l = 0; l < 0; ++l) // change this loop later
+            {
+
+            }
+
             dOldEnergy = dEnergy;
-        }
-        else
-        {
-            std::cout << "Something went terribly wrong!" << std::endl;
         }
 
         delete graph;
@@ -112,6 +213,6 @@ void GraphCutOptimizer::optimize()
 #ifdef DEBUG_TIME
     auto t2 = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds> (t2 - t1).count();
-    std::cout << "This optimization took " << duration << " milliseconds." << std::endl;
+    std::clog << "This optimization took " << duration << " milliseconds." << std::endl;
 #endif // DEBUG_TIME
 }

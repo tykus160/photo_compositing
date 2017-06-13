@@ -1,11 +1,18 @@
 #include "RGBPixel.h"
 
+#include <limits>
+
 // From CCIR 601
 const double RGBPixel::WEIGHT_R = 0.2989;
 const double RGBPixel::WEIGHT_G = 0.5870;
 const double RGBPixel::WEIGHT_B = 0.1140;
 
-const unsigned char RGBPixel::MAX_VALUE = 255;
+const unsigned char RGBPixel::MAX_VALUE = std::numeric_limits<unsigned char>::max();
+
+RGBPixel::RGBPixel(int x, int y) :
+    Pixel(x, y)
+{
+}
 
 unsigned char RGBPixel::getIntensity()
 {
@@ -24,6 +31,7 @@ bool operator==(const RGBPixel &a, const RGBPixel &b)
 
 std::ostream& operator<<(std::ostream &output, const RGBPixel &D)
 {
-    output << "RGBPixel[red: " << (int) D.r << ", green: " << (int) D.g << ", blue: " << (int) D.b << "]";
+    output << "RGBPixel[x = " << D.x << ", y = " << D.y
+        << ", red: " << (int) D.r << ", green: " << (int) D.g << ", blue: " << (int) D.b << "]";
     return output;
 }

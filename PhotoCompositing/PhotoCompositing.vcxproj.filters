@@ -4,31 +4,31 @@
     <Filter Include="src">
       <UniqueIdentifier>{870ebaf1-10c4-4a48-80e0-508adb7489e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\bitmap">
-      <UniqueIdentifier>{14fb6e70-262f-4694-a721-9cf29d77b292}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\graph">
       <UniqueIdentifier>{01e8605d-9de9-4c92-bec8-6c855a6e5b2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\matrix">
       <UniqueIdentifier>{f881578f-cd62-4886-9dde-c244e4e26da8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\image">
+      <UniqueIdentifier>{2a0fa4e8-d05e-453d-9e85-481ac30b9fff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\image\bitmap">
+      <UniqueIdentifier>{14fb6e70-262f-4694-a721-9cf29d77b292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\image\rgbpixel">
+      <UniqueIdentifier>{983103ba-87e4-4bc3-bfc6-e9ca1d84fc61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bitmap\BMP.cpp">
-      <Filter>src\bitmap</Filter>
     </ClCompile>
     <ClCompile Include="src\graph\graph.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
     <ClCompile Include="src\graph\maxflow.cpp">
       <Filter>src\graph</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bitmap\RGBPixel.cpp">
-      <Filter>src\bitmap</Filter>
     </ClCompile>
     <ClCompile Include="src\graph\Mask.cpp">
       <Filter>src\graph</Filter>
@@ -39,22 +39,25 @@
     <ClCompile Include="src\graph\GraphCutOptimizer.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
+    <ClCompile Include="src\image\Image.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image\bitmap\BMP.cpp">
+      <Filter>src\image\bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image\Histogram.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp">
+      <Filter>src\image\rgbpixel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\bitmap\BMP.h">
-      <Filter>src\bitmap</Filter>
-    </ClInclude>
     <ClInclude Include="src\graph\block.h">
       <Filter>src\graph</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\graph.h">
       <Filter>src\graph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bitmap\BMPUtils.h">
-      <Filter>src\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bitmap\RGBPixel.h">
-      <Filter>src\bitmap</Filter>
     </ClInclude>
     <ClInclude Include="src\matrix\Matrix.h">
       <Filter>src\matrix</Filter>
@@ -73,6 +76,27 @@
     </ClInclude>
     <ClInclude Include="src\ErrorCodes.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\Image.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\bitmap\BMPUtils.h">
+      <Filter>src\image\bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\bitmap\BMP.h">
+      <Filter>src\image\bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\Histogram.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\rgbpixel\RGBPixel.h">
+      <Filter>src\image\rgbpixel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\Pixel.h">
+      <Filter>src\image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

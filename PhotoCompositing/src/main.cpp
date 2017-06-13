@@ -1,86 +1,46 @@
-/*
- * Self-automatic image compositing using Graph Cut optimization.
- * Program input:
- * - 1st arg - path to prepared mask
- * - next args - paths to images which would take participance in optimization
- *
- * author: W.Tyczynski
- */
-#include <iostream>
-
-#include "ErrorCodes.h"
-
-#include "bitmap/RGBPixel.h"
-#include "bitmap/BMP.h"
-#include "matrix/Matrix.h"
-
-#include "graph/Mask.h"
-#include "graph/GraphCutOptimizer.h"
-
-void endMessage();
+#include "main.h"
 
 int main(int argc, char** argv)
 {
     std::cout << "Hello world!" << std::endl;
 
-    if (argc >= 2)
+    if (argc >= Utils::MIN_NUM_OF_ARGS)
     {
         try
         {
-            std::cout << "Loading file: " << argv[1] << std::endl;
-            BMP bitmap(argv[1]);
+            std::cout << "Loading file: " << argv[Utils::MIN_NUM_OF_ARGS - 1] << std::endl;
+
+            BMP bitmap(argv[Utils::MIN_NUM_OF_ARGS - 1]);
 
             Mask mask(&bitmap);
             mask.createLabels();
 
-            GraphCutOptimizer opt(2);
-            opt.addLabel(&bitmap);
-            opt.addLabel(&bitmap);
+            GraphCutOptimizer opt(2); // index = argc - Utils::MIN_NUM_OF_ARGS
+            opt.addLabel(&bitmap); // remove
+            opt.addLabel(&bitmap); // remove
+
+            for (int i = Utils::MIN_NUM_OF_ARGS; i < argc; ++i)
+            {
+                std::cout << "Loading file: " << argv[i] << std::endl;
+                BMP bmp(argv[i]);
+                opt.addLabel(&bmp);
+            }
+
             opt.addMask(&mask);
             opt.optimize();
         }
         catch (std::runtime_error& e)
         {
-            std::cout << e.what() << std::endl;
-            endMessage();
+            std::cerr << e.what() << std::endl;
+            Utils::endMessage();
             return ErrorCodes::WRONG_INPUT_FILE;
         }
     }
 
-    endMessage();
+    Utils::endMessage();
 }
 
-// Example from graphcut lib
-/*
-void graphTest()
-{
-    Graph::node_id nodes[2];
-    Graph *g = new Graph();
-
-    nodes[0] = g->add_node();
-    nodes[1] = g->add_node();
-    g->set_tweights(nodes[0], 1, 5);
-    g->set_tweights(nodes[1], 2, 6);
-    g->add_edge(nodes[0], nodes[1], 3, 4);
-
-    Graph::flowtype flow = g->maxflow();
-
-    printf("Flow = %d\n", flow);
-    printf("Minimum cut:\n");
-    if (g->what_segment(nodes[0]) == Graph::SOURCE)
-        printf("node0 is in the SOURCE set\n");
-    else
-        printf("node0 is in the SINK set\n");
-    if (g->what_segment(nodes[1]) == Graph::SOURCE)
-        printf("node1 is in the SOURCE set\n");
-    else
-        printf("node1 is in the SINK set\n");
-
-    delete g;
-}
-*/
-
-void endMessage()
+void Utils::endMessage()
 {
     std::cout << "Press enter to close..." << std::endl;
     std::cin.get();

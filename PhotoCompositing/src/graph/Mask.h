@@ -3,20 +3,23 @@
 
 #include <vector>
 
-#include "../bitmap/BMP.h"
+#include "../image/Image.h"
 
 class Mask
 {
 private:
     static const int NO_LABEL;
 
-    BMP* mBitmap;
+    Image* mImage;
     std::vector<int> mLabels;
 
 public:
-    Mask(BMP* bitmap);
+    Mask(Image* image);
+
     void createLabels();
+
     int getLength();
+
     int getLabelAtIndex(int index);
 };
 

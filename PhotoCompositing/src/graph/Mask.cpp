@@ -4,8 +4,8 @@
 
 const int Mask::NO_LABEL = -1;
 
-Mask::Mask(BMP* bitmap) :
-    mBitmap(bitmap)
+Mask::Mask(Image* image) :
+    mImage(image)
 {
 }
 
@@ -13,18 +13,18 @@ void Mask::createLabels()
 {
     mLabels.resize(getLength(), NO_LABEL);
 
-    for (int j = 0; j < mBitmap->getHeight(); ++j)
+    for (int j = 0; j < mImage->getHeight(); ++j)
     {
-        for (int i = 0; i < mBitmap->getWidth(); ++i)
+        for (int i = 0; i < mImage->getWidth(); ++i)
         {
-            RGBPixel* pixel = mBitmap->get(i, j);
+            RGBPixel* pixel = mImage->get(i, j);
             if (pixel->isRed())
             {
-                mLabels.at(mBitmap->getCoordinatesAsIndex(i, j)) = 0;
+                mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 0;
             }
             else if (pixel->isGreen())
             {
-                mLabels.at(mBitmap->getCoordinatesAsIndex(i, j)) = 1;
+                mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 1;
             }
         }
     }
@@ -37,5 +37,5 @@ int Mask::getLabelAtIndex(int index)
 
 int Mask::getLength()
 {
-    return mBitmap->getWidth() * mBitmap->getHeight();
+    return mImage->getWidth() * mImage->getHeight();
 }

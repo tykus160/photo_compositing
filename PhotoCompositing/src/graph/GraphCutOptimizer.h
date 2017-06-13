@@ -2,7 +2,7 @@
 #define __GRAPH_CUT_OPTIMIZER_H__
 
 #include "graph.h"
-#include "../bitmap/BMP.h"
+#include "../image/Image.h"
 #include "Mask.h"
 
 class GraphCutOptimizer
@@ -12,16 +12,19 @@ private:
     bool** mNodesActive;
     unsigned int mCapacity;
     unsigned int mActualLength = 0;
-    BMP** mLabels;
+    Image** mLabels;
     Mask* mMask = nullptr;
 
     /** Called at the beginning of optimize() */
     void init();
-    
+
 public:
     GraphCutOptimizer(unsigned int capacity);
-    void addLabel(BMP* bitmap);
+
+    void addLabel(Image* image);
+
     void addMask(Mask* mask);
+
     void optimize();
 };
 
