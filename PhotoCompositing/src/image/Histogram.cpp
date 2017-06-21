@@ -2,7 +2,9 @@
 
 Histogram::~Histogram()
 {
-    delete[] intensities;
+    delete[] intensityR;
+    delete[] intensityG;
+    delete[] intensityB;
 }
 
 void Histogram::create(Image* image)
@@ -13,7 +15,9 @@ void Histogram::create(Image* image)
         {
             for (int x = 0; x < image->getWidth(); ++x)
             {
-                ++intensities[image->get(x, y)->getIntensity()];
+                ++intensityR[image->get(x, y)->r];
+                ++intensityG[image->get(x, y)->g];
+                ++intensityB[image->get(x, y)->b];
             }
         }
     }

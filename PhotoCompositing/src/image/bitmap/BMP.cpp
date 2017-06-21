@@ -5,7 +5,13 @@
 
 #include "BMPUtils.h"
 
-BMP::BMP(char* filename)
+BMP::BMP(int width, int height) :
+    Image(width, height)
+{
+}
+
+BMP::BMP(char* filename) :
+    Image()
 {
     std::ifstream hfile(filename, std::ios::binary);
 
@@ -60,7 +66,7 @@ BMP::BMP(char* filename)
                     for (int i = 0; i < width; i++)
                     {
                         const int index = j * width + i;
-                        pixels[index] = new RGBPixel(i, j);
+                        pixels[index] = new RGBPixel;// (i, j);
                         pixels[index]->r = p_palette[(buff[i] << 2) + 2];//R
                         pixels[index]->g = p_palette[(buff[i] << 2) + 1];//G
                         pixels[index]->b = p_palette[(buff[i] << 2) + 0];//B
@@ -76,7 +82,7 @@ BMP::BMP(char* filename)
                     for (int i = 0, l = 0; i < width; i++, l += 3)
                     {
                         const int index = j * width + i;
-                        pixels[index] = new RGBPixel(i, j);
+                        pixels[index] = new RGBPixel;// (i, j);
                         pixels[index]->b = buff[l + 0];
                         pixels[index]->g = buff[l + 1];
                         pixels[index]->r = buff[l + 2];
@@ -91,7 +97,7 @@ BMP::BMP(char* filename)
                     for (int i = 0, l = 0; i < width; i++, l += 4)
                     {
                         const int index = j * width + i;
-                        pixels[index] = new RGBPixel(i, j);
+                        pixels[index] = new RGBPixel;// (i, j);
                         pixels[index]->b = buff[l + 0];
                         pixels[index]->g = buff[l + 1];
                         pixels[index]->r = buff[l + 2];

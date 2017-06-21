@@ -6,7 +6,9 @@
 class Histogram
 {
 private:
-    unsigned int* intensities = new unsigned int[RGBPixel::MAX_VALUE + 1];
+    unsigned int* intensityR = new unsigned int[RGBPixel::MAX_VALUE + 1];
+    unsigned int* intensityG = new unsigned int[RGBPixel::MAX_VALUE + 1];
+    unsigned int* intensityB = new unsigned int[RGBPixel::MAX_VALUE + 1];
 
 public:
     ~Histogram();

@@ -1,7 +1,5 @@
 #include "Mask.h"
 
-#include<iostream>
-
 const int Mask::NO_LABEL = -1;
 
 Mask::Mask(Image* image) :

@@ -18,6 +18,10 @@ protected:
     int height;
 
 public:
+    Image();
+    
+    Image(int width, int height);
+
     ~Image();
 
     virtual void saveToFile(char* filename) = 0;

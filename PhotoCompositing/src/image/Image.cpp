@@ -1,5 +1,20 @@
 #include "Image.h"
 
+Image::Image()
+{
+}
+
+Image::Image(int width, int height) :
+    width(width), height(height)
+{
+    const int length = width * height;
+    pixels = new RGBPixel*[length];
+    for (int i = 0; i < length; ++i)
+    {
+        pixels[i] = new RGBPixel;
+    }
+}
+
 Image::~Image()
 {
     for (int i = 0; i < width * height; ++i)

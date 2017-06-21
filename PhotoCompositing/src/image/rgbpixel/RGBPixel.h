@@ -2,9 +2,9 @@
 #define __RGBPIXEL_H__
 
 #include <ostream>
-#include "../Pixel.h"
+//#include "../Pixel.h"
 
-class RGBPixel : public Pixel
+class RGBPixel //: public Pixel
 {
 private:
     static const double WEIGHT_R;
@@ -14,11 +14,9 @@ private:
 public:
     static const unsigned char MAX_VALUE;
 
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-
-    RGBPixel(int x, int y);
+    unsigned char r = 0;
+    unsigned char g = 0;
+    unsigned char b = 0;
 
     unsigned char getIntensity();
 
@@ -37,9 +35,11 @@ public:
         return r == 0 && g == 0 && b == MAX_VALUE;
     }
 
-    friend bool operator!=(const RGBPixel &a, const RGBPixel &b);
-    friend bool operator==(const RGBPixel &a, const RGBPixel &b);
-    friend std::ostream& operator<<(std::ostream &output, const RGBPixel &D);
+    double distance(const RGBPixel& other);
+
+    friend bool operator!=(const RGBPixel& a, const RGBPixel& b);
+    friend bool operator==(const RGBPixel& a, const RGBPixel& b);
+    friend std::ostream& operator<<(std::ostream& output, const RGBPixel& D);
 };
 
 #endif

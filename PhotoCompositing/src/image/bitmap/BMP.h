@@ -6,6 +6,8 @@
 class BMP : public Image
 {
 public:
+    BMP(int width, int height);
+
     BMP(char* filename);
 
     void saveToFile(char* filename);
