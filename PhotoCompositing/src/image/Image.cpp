@@ -7,11 +7,13 @@ Image::Image()
 Image::Image(int width, int height) :
     width(width), height(height)
 {
-    const int length = width * height;
-    pixels = new RGBPixel*[length];
-    for (int i = 0; i < length; ++i)
+    pixels = new RGBPixel*[width * height];
+    for (int j = 0; j < height; ++j)
     {
-        pixels[i] = new RGBPixel;
+        for (int i = 0; i < width; ++i)
+        {
+            pixels[i] = new RGBPixel(i, j);
+        }
     }
 }
 

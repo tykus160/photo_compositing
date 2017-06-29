@@ -33,7 +33,22 @@ int Mask::getLabelAtIndex(int index)
     return mLabels.at(index);
 }
 
+int Mask::getLabelAtCoordinate(int x, int y)
+{
+    return getLabelAtIndex(y * getWidth() + x);
+}
+
 int Mask::getLength()
 {
     return mImage->getWidth() * mImage->getHeight();
+}
+
+int Mask::getWidth()
+{
+    return mImage->getWidth();
+}
+
+int Mask::getHeight()
+{
+    return mImage->getHeight();
 }

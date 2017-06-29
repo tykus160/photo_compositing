@@ -7,6 +7,8 @@
 #include <chrono>
 #endif // DEBUG_TIME
 
+#include "CostFunctions.h"
+
 GraphCutOptimizer::GraphCutOptimizer(unsigned int capacity)
 {
     if (capacity == 0)
@@ -57,158 +59,55 @@ void GraphCutOptimizer::init()
 
 void GraphCutOptimizer::optimize()
 {
-    init();
+    //init();
 
 #ifdef DEBUG_TIME
     auto t1 = std::chrono::high_resolution_clock::now();
 #endif // DEBUG_TIME
 
-    double dEnergy;
+    double dEnergy = 0.0;
     double dOldEnergy = 100000; // almost infinity!
 
-    for (unsigned int label = 0; label < mCapacity; ++label)
+    //for (;;)
     {
-        dEnergy = 0.0;
-
-
         Graph* graph = new Graph();
 
-        // Preparation - creating nodes
-        for (int i = 0; i < mMask->getLength(); ++i)
+        Graph::node_id* nodes = new Graph::node_id[mMask->getLength()];
+
+        for (int y = 0; y < mMask->getHeight(); ++y)
         {
-            if (label == mMask->getLabelAtIndex(i)) // not active
+            for (int x = 0; x < mMask->getWidth(); ++x)
             {
-                mNodesActive[label][i] = false;
-                mNodes[label][i] = nullptr;
-            }
-            else // active
-            {
-                mNodesActive[label][i] = true;
-                mNodes[label][i] = graph->add_node();
+                nodes[y * mMask->getHeight() + x] = graph->add_node();
             }
         }
 
-        // add cost functions here
-
-        for (int y = 0; y < mLabels[label]->getHeight(); ++y)
+        for (int y = 0; y < mMask->getHeight(); ++y)
         {
-            for (int x = 0; x < mLabels[label]->getWidth(); ++x)
+            for (int x = 0; x < mMask->getWidth(); ++x)
             {
-                int index = mLabels[label]->getCoordinatesAsIndex(x, y);
-                if (x < mLabels[label]->getWidth() - 1) // HORIZONTAL
+                //nodes[y * mMask->getHeight() + x] = graph->add_node();
+
+                if (x < mMask->getWidth() - 1)
                 {
-                    double E00 = 0;
-                    double E01 = 0;
-                    double E10 = 0;
-
-                    if (mNodesActive[label][index] && mNodesActive[label][index + 1])
-                    {
-                        //E00 =
-                    }
-                    if (mNodesActive[label][index])
-                    {
-                        //E01 =
-                    }
-                    if (mNodesActive[label][index + 1])
-                    {
-                        //E10 =
-                    }
-                    double E11 = 0; // sth else
-
-                    if (mNodesActive[label][index])
-                    {
-                        if (mNodesActive[label][index + 1])
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                    else
-                    {
-                        if (mNodesActive[label][index + 1])
-                        {
-
-                        }
-                        else
-                        {
-                            // Nothing to add
-                            dEnergy += E11;
-                        }
-                    }
-
-                }
-
-                if (y < mLabels[label]->getHeight() - 1) // VERTICAL
-                {
-                    int width = mLabels[label]->getWidth();
-
-                    double E00 = 0;
-                    double E01 = 0;
-                    double E10 = 0;
-                    
-                    if (mNodesActive[label][index] && mNodesActive[label][index + width])
-                    {
-                        //E00 =
-                    }
-                    if (mNodesActive[label][index])
-                    {
-                        //E01 =
-                    }
-                    if (mNodesActive[label][index + width])
-                    {
-                        //E10 =
-                    }
-                    double E11 = 0; // sth else
-
-                    if (mNodesActive[label][index])
-                    {
-                        if (mNodesActive[label][index + 1])
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                    else
-                    {
-                        if (mNodesActive[label][index + 1])
-                        {
-
-                        }
-                        else
-                        {
-                            // Nothing to add
-                            dEnergy += E11;
-                        }
-                    }
+                    //double e01 = CostFunctions::labeling();
                 }
             }
         }
 
-        const auto flow = graph->maxflow();
-        dEnergy += flow;
+        dEnergy = graph->maxflow();
 
-        std::cout << "Energy for label " << label << ": " << dEnergy << std::endl;
-        std::cout << "Old energy for label: " << dOldEnergy << std::endl;
-
-        if (dEnergy < dOldEnergy)
+        std::cout << "Energy: " << dEnergy << std::endl;
+        if (dEnergy > dOldEnergy)
         {
-            // TODO more logic here
-            for (int l = 0; l < 0; ++l) // change this loop later
-            {
-
-            }
-
-            dOldEnergy = dEnergy;
+            std::cout << "Something went terribly wrong!" << std::endl;
         }
 
+        dOldEnergy = dEnergy;
         delete graph;
-    }    
+    }
+
+    
 
 #ifdef DEBUG_TIME
     auto t2 = std::chrono::high_resolution_clock::now();

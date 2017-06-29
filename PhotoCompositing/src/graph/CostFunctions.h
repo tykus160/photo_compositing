@@ -1,16 +1,19 @@
 #ifndef __COST_FUNCTIONS_H__
 #define __COST_FUNCTIONS_H__
 
+#include "../image/rgbpixel/RGBPixel.h"
+#include "Mask.h"
+
 namespace CostFunctions
 {
-    int crossCostLinear(int a, int b)
+    double distance(RGBPixel& a, RGBPixel& b, Mask& mask)
     {
-        return std::abs(a - b);
+        return a.distance(b);
     }
 
-    double secondOrderCostLinear(int a, int b, int c)
+    int labeling(RGBPixel& a, RGBPixel& b, Mask& mask)
     {
-        return 0.2 * std::abs(2 * b - a - c);
+        return mask.getLabelAtCoordinate(a.x, a.y) == mask.getLabelAtCoordinate(a.x, a.y) ? 0 : 1;
     }
 }
 

@@ -20,7 +20,13 @@ public:
 
     int getLength();
 
+    int getWidth();
+
+    int getHeight();
+
     int getLabelAtIndex(int index);
+
+    int getLabelAtCoordinate(int x, int y);
 };
 
 #endif // !__MASK_H__

@@ -9,6 +9,11 @@ const double RGBPixel::WEIGHT_B = 0.1140;
 
 const unsigned char RGBPixel::MAX_VALUE = std::numeric_limits<unsigned char>::max();
 
+RGBPixel::RGBPixel(int x, int y) :
+    Pixel(x, y)
+{
+}
+
 unsigned char RGBPixel::getIntensity()
 {
     return (unsigned char) (RGBPixel::WEIGHT_R * r + RGBPixel::WEIGHT_G * g + RGBPixel::WEIGHT_B * b);
