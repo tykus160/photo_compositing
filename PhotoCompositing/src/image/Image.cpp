@@ -29,7 +29,7 @@ Image::~Image()
 RGBPixel* Image::get(int x, int y)
 {
     RGBPixel* result = nullptr;
-    if (x < width && y < height)
+    if (x < width && y < height && x >= 0 && y >= 0)
     {
         result = pixels[y * width + x];
     }

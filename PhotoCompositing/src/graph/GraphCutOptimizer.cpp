@@ -59,7 +59,7 @@ void GraphCutOptimizer::init()
 
 void GraphCutOptimizer::optimize()
 {
-    //init();
+    init();
 
 #ifdef DEBUG_TIME
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -68,30 +68,38 @@ void GraphCutOptimizer::optimize()
     double dEnergy = 0.0;
     double dOldEnergy = 100000; // almost infinity!
 
-    //for (;;)
+    for (int i = 0; i < mCapacity; ++i)
     {
         Graph* graph = new Graph();
 
-        Graph::node_id* nodes = new Graph::node_id[mMask->getLength()];
+        Image* image = mLabels[i];
 
         for (int y = 0; y < mMask->getHeight(); ++y)
         {
             for (int x = 0; x < mMask->getWidth(); ++x)
             {
-                nodes[y * mMask->getHeight() + x] = graph->add_node();
+                //std::cout << "x = " << x << " y = " << y << " idx = " << image->getCoordinatesAsIndex(x, y);
+                mNodes[i][image->getCoordinatesAsIndex(x, y)] = graph->add_node();
             }
         }
 
-        for (int y = 0; y < mMask->getHeight(); ++y)
+        for (int y = 0; y < mMask->getHeight() - 1; ++y)
         {
-            for (int x = 0; x < mMask->getWidth(); ++x)
+            for (int x = 0; x < mMask->getWidth() - 1; ++x)
             {
-                //nodes[y * mMask->getHeight() + x] = graph->add_node();
+                double eH = CostFunctions::distance(*(image->get(x, y)), *(image->get(x + 1, y)), mMask);
+                double eV = CostFunctions::distance(*(image->get(x, y)), *(image->get(x, y + 1)), mMask);
+                if (eH != 0 || eV != 0)
+                std::cout << "eH = " << eH << ", eV = " << eV << std::endl;
 
-                if (x < mMask->getWidth() - 1)
-                {
-                    //double e01 = CostFunctions::labeling();
-                }
+                graph->add_edge(mNodes[i][image->getCoordinatesAsIndex(x, y)],
+                    mNodes[i][image->getCoordinatesAsIndex(x + 1, y)],
+                    eH,
+                    eH);
+                graph->add_edge(mNodes[i][image->getCoordinatesAsIndex(x, y)],
+                    mNodes[i][image->getCoordinatesAsIndex(x, y + 1)],
+                    eV,
+                    eV);
             }
         }
 

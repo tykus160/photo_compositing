@@ -6,14 +6,14 @@
 
 namespace CostFunctions
 {
-    double distance(RGBPixel& a, RGBPixel& b, Mask& mask)
+    double distance(RGBPixel& a, RGBPixel& b, Mask* mask)
     {
         return a.distance(b);
     }
 
-    int labeling(RGBPixel& a, RGBPixel& b, Mask& mask)
+    int labeling(RGBPixel& a, RGBPixel& b, Mask* mask)
     {
-        return mask.getLabelAtCoordinate(a.x, a.y) == mask.getLabelAtCoordinate(a.x, a.y) ? 0 : 1;
+        return mask->getLabelAtCoordinate(a.x, a.y) == mask->getLabelAtCoordinate(a.x, a.y) ? 0 : 1;
     }
 }
 

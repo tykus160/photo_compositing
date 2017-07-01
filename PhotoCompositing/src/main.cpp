@@ -15,9 +15,9 @@ int main(int argc, char** argv)
             Mask mask(&bitmap);
             mask.createLabels();
 
-            GraphCutOptimizer opt(2); // index = argc - Utils::MIN_NUM_OF_ARGS
-            opt.addLabel(&bitmap); // remove
-            opt.addLabel(&bitmap); // remove
+            GraphCutOptimizer opt(argc - Utils::MIN_NUM_OF_ARGS);
+            //opt.addLabel(&bitmap); // remove
+            //opt.addLabel(&bitmap); // remove
 
             for (int i = Utils::MIN_NUM_OF_ARGS; i < argc; ++i)
             {
