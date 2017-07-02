@@ -28,6 +28,8 @@ public:
 
     RGBPixel* get(int x, int y);
 
+    void set(int x, int y, RGBPixel* px);
+
     RGBPixel* operator()(int x, int y);
 
     unsigned int getCoordinatesAsIndex(int x, int y);

@@ -13,7 +13,7 @@ namespace CostFunctions
 
     int labeling(RGBPixel& a, RGBPixel& b, Mask* mask)
     {
-        return mask->getLabelAtCoordinate(a.x, a.y) == mask->getLabelAtCoordinate(a.x, a.y) ? 0 : 1;
+        return mask->getLabelAtCoordinate(a.x, a.y) == mask->getLabelAtCoordinate(b.x, b.y) ? 0 : 1;
     }
 }
 

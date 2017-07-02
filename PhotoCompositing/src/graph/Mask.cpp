@@ -5,12 +5,11 @@ const int Mask::NO_LABEL = -1;
 Mask::Mask(Image* image) :
     mImage(image)
 {
+    mLabels.resize(getLength(), 0);
 }
 
 void Mask::createLabels()
 {
-    mLabels.resize(getLength(), NO_LABEL);
-
     for (int j = 0; j < mImage->getHeight(); ++j)
     {
         for (int i = 0; i < mImage->getWidth(); ++i)
@@ -51,4 +50,9 @@ int Mask::getWidth()
 int Mask::getHeight()
 {
     return mImage->getHeight();
+}
+
+void Mask::setLabelAtCoordinate(int x, int y, int label)
+{
+    mLabels.at(mImage->getCoordinatesAsIndex(x, y)) = label;
 }

@@ -20,6 +20,8 @@ public:
 
     RGBPixel(int x, int y);
 
+    RGBPixel(const RGBPixel& other);
+
     unsigned char getIntensity();
 
     bool isRed()

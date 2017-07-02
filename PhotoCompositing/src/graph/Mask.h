@@ -27,6 +27,8 @@ public:
     int getLabelAtIndex(int index);
 
     int getLabelAtCoordinate(int x, int y);
+
+    void setLabelAtCoordinate(int x, int y, int label);
 };
 
 #endif // !__MASK_H__

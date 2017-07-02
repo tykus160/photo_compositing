@@ -1,6 +1,8 @@
 #ifndef __GRAPH_CUT_OPTIMIZER_H__
 #define __GRAPH_CUT_OPTIMIZER_H__
 
+#include <vector>
+
 #include "graph.h"
 #include "../image/Image.h"
 #include "Mask.h"
@@ -11,12 +13,14 @@ private:
     Graph::node_id** mNodes;
     bool** mNodesActive;
     unsigned int mCapacity;
-    unsigned int mActualLength = 0;
-    Image** mLabels;
+    std::vector<Image*> mLabels;
     Mask* mMask = nullptr;
+    bool optimizationComplete = false;
 
     /** Called at the beginning of optimize() */
     void init();
+
+    RGBPixel* getOptimizedValue(int x, int y);
 
 public:
     GraphCutOptimizer(unsigned int capacity);
@@ -26,6 +30,8 @@ public:
     void addMask(Mask* mask);
 
     void optimize();
+
+    void saveToImage(char* filename);
 };
 
 #endif // !__GRAPH_CUT_OPTIMIZER_H__

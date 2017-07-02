@@ -8,13 +8,6 @@ Image::Image(int width, int height) :
     width(width), height(height)
 {
     pixels = new RGBPixel*[width * height];
-    for (int j = 0; j < height; ++j)
-    {
-        for (int i = 0; i < width; ++i)
-        {
-            pixels[i] = new RGBPixel(i, j);
-        }
-    }
 }
 
 Image::~Image()
@@ -26,12 +19,17 @@ Image::~Image()
     delete[] pixels;
 }
 
+void Image::set(int x, int y, RGBPixel* px)
+{
+    pixels[getCoordinatesAsIndex(x, y)] = px;
+}
+
 RGBPixel* Image::get(int x, int y)
 {
     RGBPixel* result = nullptr;
     if (x < width && y < height && x >= 0 && y >= 0)
     {
-        result = pixels[y * width + x];
+        result = pixels[getCoordinatesAsIndex(x,y)];
     }
     return result;
 }

@@ -5,6 +5,10 @@
 
 #include "BMPUtils.h"
 
+BMP::BMP() :
+    Image()
+{
+}
 BMP::BMP(int width, int height) :
     Image(width, height)
 {

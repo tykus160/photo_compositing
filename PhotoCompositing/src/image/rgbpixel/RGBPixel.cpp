@@ -14,6 +14,14 @@ RGBPixel::RGBPixel(int x, int y) :
 {
 }
 
+RGBPixel::RGBPixel(const RGBPixel& other) :
+    Pixel(other.x, other.y)
+{
+    r = other.r;
+    g = other.g;
+    b = other.b;
+}
+
 unsigned char RGBPixel::getIntensity()
 {
     return (unsigned char) (RGBPixel::WEIGHT_R * r + RGBPixel::WEIGHT_G * g + RGBPixel::WEIGHT_B * b);

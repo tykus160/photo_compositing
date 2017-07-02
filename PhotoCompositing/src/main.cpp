@@ -16,18 +16,24 @@ int main(int argc, char** argv)
             mask.createLabels();
 
             GraphCutOptimizer opt(argc - Utils::MIN_NUM_OF_ARGS);
-            //opt.addLabel(&bitmap); // remove
-            //opt.addLabel(&bitmap); // remove
-
+            BMP** bmps = new BMP*[argc - Utils::MIN_NUM_OF_ARGS];
             for (int i = Utils::MIN_NUM_OF_ARGS; i < argc; ++i)
             {
                 std::cout << "Loading file: " << argv[i] << std::endl;
-                BMP bmp(argv[i]);
-                opt.addLabel(&bmp);
+                bmps[i - Utils::MIN_NUM_OF_ARGS] = new BMP(argv[i]);
+                opt.addLabel(bmps[i - Utils::MIN_NUM_OF_ARGS]);
             }
 
             opt.addMask(&mask);
             opt.optimize();
+
+            //opt.saveToImage("E:\\GoogleDrive\\magisterka\\tests\\test1\\sample_result.bmp");
+
+            for (int i = 0; i < argc - Utils::MIN_NUM_OF_ARGS; ++i)
+            {
+                delete bmps[i];
+            }
+            delete[] bmps;
         }
         catch (std::runtime_error& e)
         {
