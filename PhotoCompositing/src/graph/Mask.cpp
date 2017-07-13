@@ -5,23 +5,34 @@ const int Mask::NO_LABEL = -1;
 Mask::Mask(Image* image) :
     mImage(image)
 {
-    mLabels.resize(getLength(), 0);
+    mWidth = mImage->getWidth();
+    mHeight = mImage->getHeight();
+    mLabels.resize(getLength(), NO_LABEL);
+}
+
+Mask::Mask(int width, int height) :
+    mWidth(width), mHeight(height)
+{
+    mLabels.resize(getLength(), NO_LABEL);
 }
 
 void Mask::createLabels()
 {
-    for (int j = 0; j < mImage->getHeight(); ++j)
+    if (mImage != nullptr)
     {
-        for (int i = 0; i < mImage->getWidth(); ++i)
+        for (int j = 0; j < mImage->getHeight(); ++j)
         {
-            RGBPixel* pixel = mImage->get(i, j);
-            if (pixel->isRed())
+            for (int i = 0; i < mImage->getWidth(); ++i)
             {
-                mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 0;
-            }
-            else if (pixel->isGreen())
-            {
-                mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 1;
+                RGBPixel* pixel = mImage->get(i, j);
+                if (pixel->isRed())
+                {
+                    mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 0;
+                }
+                else if (pixel->isGreen())
+                {
+                    mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = 1;
+                }
             }
         }
     }
@@ -39,20 +50,20 @@ int Mask::getLabelAtCoordinate(int x, int y)
 
 int Mask::getLength()
 {
-    return mImage->getWidth() * mImage->getHeight();
+    return getWidth() * getHeight();
 }
 
 int Mask::getWidth()
 {
-    return mImage->getWidth();
+    return mWidth;
 }
 
 int Mask::getHeight()
 {
-    return mImage->getHeight();
+    return mHeight;
 }
 
 void Mask::setLabelAtCoordinate(int x, int y, int label)
 {
-    mLabels.at(mImage->getCoordinatesAsIndex(x, y)) = label;
+    mLabels.at(y * mWidth + x) = label;
 }

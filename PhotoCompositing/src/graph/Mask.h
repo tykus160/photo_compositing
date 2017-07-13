@@ -10,11 +10,15 @@ class Mask
 private:
     static const int NO_LABEL;
 
-    Image* mImage;
+    Image* mImage = nullptr;
+    int mWidth;
+    int mHeight;
     std::vector<int> mLabels;
 
 public:
     Mask(Image* image);
+
+    Mask(int width, int height);
 
     void createLabels();
 

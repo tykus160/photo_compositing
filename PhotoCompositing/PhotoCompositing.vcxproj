@@ -22,6 +22,7 @@
     <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\graph\CostFunctions.cpp" />
     <ClCompile Include="src\graph\graph.cpp" />
     <ClCompile Include="src\graph\GraphCutOptimizer.cpp" />
     <ClCompile Include="src\graph\Mask.cpp" />

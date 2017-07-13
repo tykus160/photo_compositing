@@ -6,24 +6,30 @@
 #include "graph.h"
 #include "../image/Image.h"
 #include "Mask.h"
+#include "CostFunctions.h"
 
 class GraphCutOptimizer
 {
 private:
+    static double MAX_WEIGHT;
+
     Graph::node_id** mNodes;
-    bool** mNodesActive;
     unsigned int mCapacity;
     std::vector<Image*> mLabels;
     Mask* mMask = nullptr;
+    Mask* outputMask = nullptr;
     bool optimizationComplete = false;
+    CostFunction costFunction;
 
     /** Called at the beginning of optimize() */
     void init();
 
+    double optimizationFirstPhase();
+
     RGBPixel* getOptimizedValue(int x, int y);
 
 public:
-    GraphCutOptimizer(unsigned int capacity);
+    GraphCutOptimizer(unsigned int capacity, CostFunction function);
 
     void addLabel(Image* image);
 

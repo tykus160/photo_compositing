@@ -4,17 +4,14 @@
 #include "../image/rgbpixel/RGBPixel.h"
 #include "Mask.h"
 
+/** Pointer for CostFunctions methods */
+typedef double(*CostFunction)(RGBPixel&, RGBPixel&, Mask*);
+
 namespace CostFunctions
 {
-    double distance(RGBPixel& a, RGBPixel& b, Mask* mask)
-    {
-        return a.distance(b);
-    }
+    double distance(RGBPixel& a, RGBPixel& b, Mask* mask);
 
-    int labeling(RGBPixel& a, RGBPixel& b, Mask* mask)
-    {
-        return mask->getLabelAtCoordinate(a.x, a.y) == mask->getLabelAtCoordinate(b.x, b.y) ? 0 : 1;
-    }
+    double labeling(RGBPixel& a, RGBPixel& b, Mask* mask);
 }
 
 #endif // !__COST_FUNCTIONS_H__

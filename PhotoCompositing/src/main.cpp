@@ -15,7 +15,7 @@ int main(int argc, char** argv)
             Mask mask(&bitmap);
             mask.createLabels();
 
-            GraphCutOptimizer opt(argc - Utils::MIN_NUM_OF_ARGS);
+            GraphCutOptimizer opt(argc - Utils::MIN_NUM_OF_ARGS, CostFunctions::labeling);
             BMP** bmps = new BMP*[argc - Utils::MIN_NUM_OF_ARGS];
             for (int i = Utils::MIN_NUM_OF_ARGS; i < argc; ++i)
             {
