@@ -7,13 +7,13 @@ Mask::Mask(Image* image) :
 {
     mWidth = mImage->getWidth();
     mHeight = mImage->getHeight();
-    mLabels.resize(getLength(), NO_LABEL);
+    mLabels.resize(getLength(), 0);
 }
 
 Mask::Mask(int width, int height) :
     mWidth(width), mHeight(height)
 {
-    mLabels.resize(getLength(), NO_LABEL);
+    mLabels.resize(getLength(), 0);
 }
 
 void Mask::createLabels()

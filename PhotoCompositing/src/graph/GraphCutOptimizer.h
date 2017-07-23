@@ -17,19 +17,26 @@ private:
     unsigned int mCapacity;
     std::vector<Image*> mLabels;
     Mask* mMask = nullptr;
-    Mask* outputMask = nullptr;
     bool optimizationComplete = false;
     CostFunction costFunction;
 
     /** Called at the beginning of optimize() */
     void init();
 
-    double optimizationFirstPhase();
-
     RGBPixel* getOptimizedValue(int x, int y);
+
+    double calculateEnergy(
+        Graph* graph,
+        int indexOfSource,
+        int x1,
+        int y1,
+        int x2,
+        int y2);
 
 public:
     GraphCutOptimizer(unsigned int capacity, CostFunction function);
+
+    ~GraphCutOptimizer();
 
     void addLabel(Image* image);
 
