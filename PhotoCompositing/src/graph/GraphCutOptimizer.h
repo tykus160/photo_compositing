@@ -14,8 +14,8 @@ private:
     static double MAX_WEIGHT;
 
     Graph::node_id** mNodes;
-    unsigned int mCapacity;
-    std::vector<Image*> mLabels;
+    unsigned int mNumberOfLabels;
+    std::vector<Image*> mImages;
     Mask* mMask = nullptr;
     bool optimizationComplete = false;
     CostFunction costFunction;
@@ -38,7 +38,7 @@ public:
 
     ~GraphCutOptimizer();
 
-    void addLabel(Image* image);
+    void addImage(Image* image);
 
     void addMask(Mask* mask);
 

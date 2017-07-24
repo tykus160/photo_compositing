@@ -21,13 +21,13 @@ int main(int argc, char** argv)
             {
                 std::cout << "Loading file: " << argv[i] << std::endl;
                 bmps[i - Utils::MIN_NUM_OF_ARGS] = new BMP(argv[i]);
-                opt.addLabel(bmps[i - Utils::MIN_NUM_OF_ARGS]);
+                opt.addImage(bmps[i - Utils::MIN_NUM_OF_ARGS]);
             }
 
             opt.addMask(&mask);
             opt.optimize();
 
-            //opt.saveToImage("E:\\GoogleDrive\\magisterka\\tests\\test1\\sample_result.bmp");
+            opt.saveToImage("C:\\Users\\Wojciech\\Desktop\\photo_compositing\\result.bmp");
 
             for (int i = 0; i < argc - Utils::MIN_NUM_OF_ARGS; ++i)
             {

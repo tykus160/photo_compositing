@@ -1,4 +1,5 @@
 #include "Mask.h"
+#include "../image/bitmap/BMP.h"
 
 const int Mask::NO_LABEL = -1;
 
@@ -66,4 +67,30 @@ int Mask::getHeight()
 void Mask::setLabelAtCoordinate(int x, int y, int label)
 {
     mLabels.at(y * mWidth + x) = label;
+}
+
+void Mask::saveToImage(char* filename)
+{
+    BMP image(mWidth, mHeight);
+    for (int y = 0; y < mHeight; ++y)
+    {
+        for (int x = 0; x < mWidth; ++x)
+        {
+            RGBPixel* pixel = new RGBPixel(x, y);
+            if (getLabelAtCoordinate(x, y) == 0)
+            {
+                pixel->r = 255;
+                pixel->g = 255;
+                pixel->b = 255;
+            }
+            else if (getLabelAtCoordinate(x, y) == 1)
+            {
+                pixel->r = 0;
+                pixel->g = 255;
+                pixel->b = 0;
+            }
+            image.set(x, y, pixel);
+        }
+    }
+    image.saveToFile(filename);
 }

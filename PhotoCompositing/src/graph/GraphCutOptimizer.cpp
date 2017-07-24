@@ -13,18 +13,18 @@ double GraphCutOptimizer::MAX_WEIGHT = std::numeric_limits<double>::max();
 
 /////////////////////////////////////////////////////////////////////////////////
 
-GraphCutOptimizer::GraphCutOptimizer(unsigned int capacity, CostFunction function)
+GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function)
 {
-    if (capacity == 0)
+    if (numberOfLabels == 0)
     {
-        throw std::invalid_argument("capacity must be greater than 0");
+        throw std::invalid_argument("numberOfLabels must be greater than 0");
     }
     if (function == nullptr)
     {
         throw std::invalid_argument("function cannot be null");
     }
-    mCapacity = capacity;
-    mLabels.reserve(mCapacity);
+    mNumberOfLabels = numberOfLabels;
+    mImages.reserve(mNumberOfLabels);
     costFunction = function;
 }
 
@@ -32,9 +32,9 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int capacity, CostFunction functio
 
 GraphCutOptimizer::~GraphCutOptimizer()
 {
-    mLabels.clear();
+    mImages.clear();
 
-    for (unsigned int i = 0; i < mCapacity; ++i)
+    for (unsigned int i = 0; i < mNumberOfLabels; ++i)
     {
         delete[] mNodes[i];
     }
@@ -43,11 +43,11 @@ GraphCutOptimizer::~GraphCutOptimizer()
 
 /////////////////////////////////////////////////////////////////////////////////
 
-void GraphCutOptimizer::addLabel(Image* image)
+void GraphCutOptimizer::addImage(Image* image)
 {
-    if (mLabels.size() < mCapacity)
+    if (mImages.size() < mNumberOfLabels)
     {
-        mLabels.push_back(image);
+        mImages.push_back(image);
     }
     else
     {
@@ -66,7 +66,7 @@ void GraphCutOptimizer::addMask(Mask* mask)
 
 void GraphCutOptimizer::init()
 {
-    if (mLabels.empty())
+    if (mImages.empty())
     {
         throw std::logic_error("Cannot optimize without any label");
     }
@@ -75,9 +75,9 @@ void GraphCutOptimizer::init()
         throw std::logic_error("Cannot optimize without mask");
     }
 
-    mNodes = new Graph::node_id*[mCapacity];
+    mNodes = new Graph::node_id*[mNumberOfLabels];
 
-    for (unsigned int i = 0; i < mCapacity; ++i)
+    for (unsigned int i = 0; i < mNumberOfLabels; ++i)
     {
         mNodes[i] = new Graph::node_id[mMask->getLength()];
     }
@@ -97,11 +97,11 @@ void GraphCutOptimizer::optimize()
 
         double dOldEnergy = MAX_WEIGHT; // almost infinity!
 
-        for (int indexOfSource = 0; indexOfSource < mCapacity; ++indexOfSource) // loop for every label
+        for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
         {
             double dEnergy = 0.0;
             Graph* graph = new Graph();
-            Image* image = mLabels.at(indexOfSource);
+            Image* image = mImages.at(indexOfSource);
 
             // Preparing nodes
             for (int y = 0; y < mMask->getHeight(); ++y)
@@ -152,7 +152,6 @@ void GraphCutOptimizer::optimize()
                         {
                             mMask->setLabelAtCoordinate(x, y, indexOfSource);
                         }
-                        //std::cout << "indexofsource = " << indexOfSource << ", label = " << mMask->getLabelAtCoordinate(x, y) << std::endl;
                     }
                 }
                 dOldEnergy = dEnergy;
@@ -186,12 +185,12 @@ double GraphCutOptimizer::calculateEnergy(
     int y2)
 {
     double result = 0.0;
-    auto image = mLabels.at(indexOfSource);
+    auto image = mImages.at(indexOfSource);
     auto pxI11 = image->get(x1, y1);
     auto pxI22 = image->get(x2, y2);
-    auto pxL11 = mLabels.at(mMask->getLabelAtCoordinate(x1, y1))->get(x1, y1);
-    auto pxL22 = mLabels.at(mMask->getLabelAtCoordinate(x2, y2))->get(x2, y2);
-    auto pxL12 = mLabels.at(mMask->getLabelAtCoordinate(x1, y1))->get(x2, y2);
+    auto pxL11 = mImages.at(mMask->getLabelAtCoordinate(x1, y1))->get(x1, y1);
+    auto pxL22 = mImages.at(mMask->getLabelAtCoordinate(x2, y2))->get(x2, y2);
+    auto pxL12 = mImages.at(mMask->getLabelAtCoordinate(x1, y1))->get(x2, y2);
 
     // check if nodes at provided coordinates are active
     bool active1 = mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)] != nullptr;
@@ -252,7 +251,8 @@ void GraphCutOptimizer::saveToImage(char* filename)
             image.set(x, y, getOptimizedValue(x, y));
         }
     }
-    image.saveToFile(filename); 
+    image.saveToFile(filename);
+    //mMask->saveToImage("C:\\Users\\Wojciech\\Desktop\\photo_compositing\\mask_out.bmp");
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +260,6 @@ void GraphCutOptimizer::saveToImage(char* filename)
 RGBPixel* GraphCutOptimizer::getOptimizedValue(int x, int y)
 {
     int label = mMask->getLabelAtCoordinate(x, y);
-    RGBPixel* pixel = mLabels.at(label)->get(x, y);
+    RGBPixel* pixel = mImages.at(label)->get(x, y);
     return new RGBPixel(*pixel);
 }

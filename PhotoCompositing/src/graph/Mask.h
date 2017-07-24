@@ -33,6 +33,8 @@ public:
     int getLabelAtCoordinate(int x, int y);
 
     void setLabelAtCoordinate(int x, int y, int label);
+
+    void saveToImage(char* filename);
 };
 
 #endif // !__MASK_H__
