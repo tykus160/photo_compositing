@@ -33,9 +33,6 @@
     <ClCompile Include="src\graph\Mask.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
-    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
-      <Filter>src\graph</Filter>
-    </ClCompile>
     <ClCompile Include="src\graph\GraphCutOptimizer.cpp">
       <Filter>src\graph</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>src\graph</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\Mask.h">
-      <Filter>src\graph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
       <Filter>src\graph</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\GraphCutOptimizer.h">

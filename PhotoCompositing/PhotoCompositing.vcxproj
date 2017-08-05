@@ -19,9 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\graph\cGraphCutOptimizer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\graph\CostFunctions.cpp" />
     <ClCompile Include="src\graph\graph.cpp" />
     <ClCompile Include="src\graph\GraphCutOptimizer.cpp" />
@@ -37,9 +34,6 @@
     <ClInclude Include="src\ErrorCodes.h" />
     <ClInclude Include="src\graph\block.h" />
     <ClInclude Include="src\graph\CostFunctions.h" />
-    <ClInclude Include="src\graph\cGraphCutOptimizer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\graph\graph.h" />
     <ClInclude Include="src\graph\GraphCutOptimizer.h" />
     <ClInclude Include="src\graph\Mask.h" />
