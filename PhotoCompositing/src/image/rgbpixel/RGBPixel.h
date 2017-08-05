@@ -2,9 +2,8 @@
 #define __RGBPIXEL_H__
 
 #include <ostream>
-#include "../Pixel.h"
 
-class RGBPixel : public Pixel
+class RGBPixel
 {
 private:
     static const double WEIGHT_R;
@@ -18,7 +17,7 @@ public:
     unsigned char g = 0;
     unsigned char b = 0;
 
-    RGBPixel(int x, int y);
+    RGBPixel();
 
     RGBPixel(const RGBPixel& other);
 

@@ -9,13 +9,11 @@ const double RGBPixel::WEIGHT_B = 0.1140;
 
 const unsigned char RGBPixel::MAX_VALUE = std::numeric_limits<unsigned char>::max();
 
-RGBPixel::RGBPixel(int x, int y) :
-    Pixel(x, y)
+RGBPixel::RGBPixel()
 {
 }
 
-RGBPixel::RGBPixel(const RGBPixel& other) :
-    Pixel(other.x, other.y)
+RGBPixel::RGBPixel(const RGBPixel& other)
 {
     r = other.r;
     g = other.g;

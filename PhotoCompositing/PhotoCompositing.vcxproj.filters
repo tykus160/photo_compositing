@@ -98,8 +98,5 @@
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h">
       <Filter>src\image\rgbpixel</Filter>
     </ClInclude>
-    <ClInclude Include="src\image\Pixel.h">
-      <Filter>src\image</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

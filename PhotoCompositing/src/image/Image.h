@@ -7,8 +7,7 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include "Pixel.h"
-#include "rgbpixel/RGBPixel.h" // TODO remove later and use Pixel only
+#include "rgbpixel/RGBPixel.h"
 
 class Image
 {
