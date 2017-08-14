@@ -1,6 +1,7 @@
 #ifndef __GRAPH_CUT_OPTIMIZER_H__
 #define __GRAPH_CUT_OPTIMIZER_H__
 
+#include <string>
 #include <vector>
 
 #include "graph.h"
@@ -34,7 +35,7 @@ private:
         int y2);
 
 public:
-    GraphCutOptimizer(unsigned int capacity, CostFunction function);
+    GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function);
 
     ~GraphCutOptimizer();
 
@@ -44,7 +45,7 @@ public:
 
     void optimize();
 
-    void saveToImage(char* filename);
+    void saveToImage(std::string filename);
 };
 
 #endif // !__GRAPH_CUT_OPTIMIZER_H__

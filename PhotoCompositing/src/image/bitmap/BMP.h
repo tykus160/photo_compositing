@@ -10,9 +10,11 @@ public:
 
     BMP(int width, int height);
 
-    BMP(char* filename);
+    BMP(const char* filename);
 
-    void saveToFile(char* filename);
+    BMP(std::string filename);
+
+    void saveToFile(const char* filename);
 };
 
 #endif

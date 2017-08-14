@@ -9,12 +9,18 @@ BMP::BMP() :
     Image()
 {
 }
+
 BMP::BMP(int width, int height) :
     Image(width, height)
 {
 }
 
-BMP::BMP(char* filename) :
+BMP::BMP(std::string filename) :
+    BMP(filename.c_str())
+{
+}
+
+BMP::BMP(const char* filename) :
     Image()
 {
     std::ifstream hfile(filename, std::ios::binary);
@@ -125,7 +131,7 @@ BMP::BMP(char* filename) :
     }
 }
 
-void BMP::saveToFile(char* filename)
+void BMP::saveToFile(const char* filename)
 {
     std::ofstream hfile(filename, std::ios::binary);
 

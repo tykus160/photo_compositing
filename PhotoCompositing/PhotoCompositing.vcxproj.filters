@@ -19,6 +19,9 @@
     <Filter Include="src\image\rgbpixel">
       <UniqueIdentifier>{983103ba-87e4-4bc3-bfc6-e9ca1d84fc61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{3ca28a57-3a64-4a84-b598-b93aec9fffdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -50,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="src\graph\CostFunctions.cpp">
       <Filter>src\graph</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\StringUtils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Properties.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h">
       <Filter>src\image\rgbpixel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\StringUtils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Properties.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

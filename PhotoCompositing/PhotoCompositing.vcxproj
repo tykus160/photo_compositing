@@ -29,6 +29,8 @@
     <ClCompile Include="src\image\Image.cpp" />
     <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\Properties.cpp" />
+    <ClCompile Include="src\utils\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ErrorCodes.h" />
@@ -44,6 +46,8 @@
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\matrix\Matrix.h" />
+    <ClInclude Include="src\utils\Properties.h" />
+    <ClInclude Include="src\utils\StringUtils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

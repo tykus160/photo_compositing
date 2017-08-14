@@ -69,14 +69,14 @@ void Mask::setLabelAtCoordinate(int x, int y, int label)
     mLabels.at(y * mWidth + x) = label;
 }
 
-void Mask::saveToImage(char* filename)
+void Mask::saveToImage(std::string filename)
 {
-    BMP image(mWidth, mHeight);
+    Image* image = new BMP(mWidth, mHeight);
     for (int y = 0; y < mHeight; ++y)
     {
         for (int x = 0; x < mWidth; ++x)
         {
-            RGBPixel* pixel = new RGBPixel(x, y);
+            RGBPixel* pixel = new RGBPixel;
             if (getLabelAtCoordinate(x, y) == 0)
             {
                 pixel->r = 255;
@@ -89,8 +89,9 @@ void Mask::saveToImage(char* filename)
                 pixel->g = 255;
                 pixel->b = 0;
             }
-            image.set(x, y, pixel);
+            image->set(x, y, pixel);
         }
     }
-    image.saveToFile(filename);
+    image->saveToFile(filename);
+    delete image;
 }

@@ -11,6 +11,7 @@
 
 #include <iostream>
 
+#include "utils/Properties.h"
 #include "ErrorCodes.h"
 #include "image/bitmap/BMP.h"
 #include "graph/Mask.h"

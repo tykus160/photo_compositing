@@ -9,27 +9,29 @@ int main(int argc, char** argv)
         try
         {
             std::cout << "Loading file: " << argv[Utils::MIN_NUM_OF_ARGS - 1] << std::endl;
+            Properties::getInstance().loadFile(argv[Utils::MIN_NUM_OF_ARGS - 1]);
 
-            BMP bitmap(argv[Utils::MIN_NUM_OF_ARGS - 1]);
+            BMP bitmap(Properties::getInstance().get("mask"));
 
             Mask mask(&bitmap);
             mask.createLabels();
 
-            GraphCutOptimizer opt(argc - Utils::MIN_NUM_OF_ARGS, CostFunctions::labeling);
-            BMP** bmps = new BMP*[argc - Utils::MIN_NUM_OF_ARGS];
-            for (int i = Utils::MIN_NUM_OF_ARGS; i < argc; ++i)
+            int numOfLabels = Properties::getInstance().getInt("num_of_labels");
+
+            GraphCutOptimizer opt(numOfLabels, CostFunctions::crossCost);
+            BMP** bmps = new BMP*[numOfLabels];
+            for (int i = 0; i < numOfLabels; ++i)
             {
-                std::cout << "Loading file: " << argv[i] << std::endl;
-                bmps[i - Utils::MIN_NUM_OF_ARGS] = new BMP(argv[i]);
-                opt.addImage(bmps[i - Utils::MIN_NUM_OF_ARGS]);
+                bmps[i] = new BMP(Properties::getInstance().get("image_" + std::to_string(i)));
+                opt.addImage(bmps[i]);
             }
 
             opt.addMask(&mask);
             opt.optimize();
 
-            opt.saveToImage("C:\\Users\\Wojciech\\Desktop\\photo_compositing\\result.bmp");
+            opt.saveToImage(Properties::getInstance().get("dest_image"));
 
-            for (int i = 0; i < argc - Utils::MIN_NUM_OF_ARGS; ++i)
+            for (int i = 0; i < numOfLabels; ++i)
             {
                 delete bmps[i];
             }

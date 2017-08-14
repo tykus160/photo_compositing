@@ -34,7 +34,7 @@ public:
 
     void setLabelAtCoordinate(int x, int y, int label);
 
-    void saveToImage(char* filename);
+    void saveToImage(std::string filename);
 };
 
 #endif // !__MASK_H__

@@ -8,6 +8,7 @@
 #endif // DEBUG_TIME
 
 #include "../image/bitmap/BMP.h"
+#include "../utils/Properties.h"
 
 double GraphCutOptimizer::MAX_WEIGHT = std::numeric_limits<double>::max();
 
@@ -148,7 +149,7 @@ void GraphCutOptimizer::optimize()
                     for (int x = 0; x < mMask->getWidth(); ++x)
                     {
                         auto node = mNodes[indexOfSource][image->getCoordinatesAsIndex(x, y)];
-                        if (node != nullptr && graph->what_segment(node) != Graph::SOURCE)
+                        if (node != nullptr && graph->what_segment(node) == Graph::SINK)
                         {
                             mMask->setLabelAtCoordinate(x, y, indexOfSource);
                         }
@@ -188,9 +189,11 @@ double GraphCutOptimizer::calculateEnergy(
     auto image = mImages.at(indexOfSource);
     auto pxI11 = image->get(x1, y1);
     auto pxI22 = image->get(x2, y2);
-    auto pxL11 = mImages.at(mMask->getLabelAtCoordinate(x1, y1))->get(x1, y1);
-    auto pxL22 = mImages.at(mMask->getLabelAtCoordinate(x2, y2))->get(x2, y2);
-    auto pxL12 = mImages.at(mMask->getLabelAtCoordinate(x1, y1))->get(x2, y2);
+    int label1 = mMask->getLabelAtCoordinate(x1, y1);
+    int label2 = mMask->getLabelAtCoordinate(x2, y2);
+    auto pxL11 = mImages.at(label1)->get(x1, y1);
+    auto pxL22 = mImages.at(label2)->get(x2, y2);
+    auto pxL12 = mImages.at(label1)->get(x2, y2);
 
     // check if nodes at provided coordinates are active
     bool active1 = mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)] != nullptr;
@@ -220,39 +223,34 @@ double GraphCutOptimizer::calculateEnergy(
             graph->add_term1(mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)], e01, e11);
         }
     }
+    else if (active2)
+    {
+        graph->add_term1(mNodes[indexOfSource][image->getCoordinatesAsIndex(x2, y2)], e10, e11);
+    }
     else
     {
-        if (active2)
-        {
-            graph->add_term1(mNodes[indexOfSource][image->getCoordinatesAsIndex(x2, y2)], e10, e11);
-        }
-        else
-        {
-            // nothing to add
-            result = e11;
-        }
+        // nothing to add
+        result = e11;
     }
+
     return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
-void GraphCutOptimizer::saveToImage(char* filename)
+void GraphCutOptimizer::saveToImage(std::string filename)
 {
-    if (filename == nullptr)
-    {
-        throw std::logic_error("Filename must be specified");
-    }
-    BMP image(mMask->getWidth(), mMask->getHeight());
+    Image* image = new BMP(mMask->getWidth(), mMask->getHeight());
     for (int y = 0; y < mMask->getHeight(); ++y)
     {
         for (int x = 0; x < mMask->getWidth(); ++x)
         {
-            image.set(x, y, getOptimizedValue(x, y));
+            image->set(x, y, getOptimizedValue(x, y));
         }
     }
-    image.saveToFile(filename);
-    //mMask->saveToImage("C:\\Users\\Wojciech\\Desktop\\photo_compositing\\mask_out.bmp");
+    image->saveToFile(filename);
+    mMask->saveToImage(Properties::getInstance().get("debug_mask"));
+    delete image;
 }
 
 /////////////////////////////////////////////////////////////////////////////////

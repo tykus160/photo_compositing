@@ -7,6 +7,8 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
+#include <string>
+
 #include "rgbpixel/RGBPixel.h"
 
 class Image
@@ -23,7 +25,9 @@ public:
 
     ~Image();
 
-    virtual void saveToFile(char* filename) = 0;
+    virtual void saveToFile(const char* filename) = 0;
+
+    void saveToFile(std::string filename);
 
     RGBPixel* get(int x, int y);
 

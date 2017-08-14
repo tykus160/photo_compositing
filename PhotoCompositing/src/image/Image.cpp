@@ -43,3 +43,8 @@ unsigned int Image::getCoordinatesAsIndex(int x, int y)
 {
     return y * width + x;
 }
+
+void Image::saveToFile(std::string filename)
+{
+    saveToFile(filename.c_str());
+}
