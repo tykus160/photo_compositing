@@ -1,3 +1,9 @@
+/**
+ * Class representing pixel as 3-channel value (8 bits per every channel). Available channels: red, green, blue.
+ * All channels are stored as public fields to simplify operations in one channel only.
+ *
+ * @author W.Tyczynski
+ */
 #ifndef __RGBPIXEL_H__
 #define __RGBPIXEL_H__
 
@@ -23,22 +29,9 @@ public:
 
     unsigned char getIntensity();
 
-    bool isRed()
-    {
-        return r == MAX_VALUE && g == 0 && b == 0;
-    }
-
-    bool isGreen()
-    {
-        return r == 0 && g == MAX_VALUE && b == 0;
-    }
-
-    bool isBlue()
-    {
-        return r == 0 && g == 0 && b == MAX_VALUE;
-    }
-
     double distance(const RGBPixel& other);
+
+    unsigned int toHex();
 
     friend bool operator!=(const RGBPixel& a, const RGBPixel& b);
     friend bool operator==(const RGBPixel& a, const RGBPixel& b);

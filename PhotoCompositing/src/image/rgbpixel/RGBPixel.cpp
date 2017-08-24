@@ -30,6 +30,11 @@ double RGBPixel::distance(const RGBPixel& other)
     return std::sqrt(std::pow(r - other.r, 2) + std::pow(g - other.g, 2) + std::pow(b - other.b, 2));
 }
 
+unsigned int RGBPixel::toHex()
+{
+    return ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF);
+}
+
 bool operator!=(const RGBPixel& a, const RGBPixel& b)
 {
     return !(a == b);

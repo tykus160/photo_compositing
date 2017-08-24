@@ -12,8 +12,6 @@
 class GraphCutOptimizer
 {
 private:
-    static double MAX_WEIGHT;
-
     Graph::node_id** mNodes;
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;

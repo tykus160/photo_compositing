@@ -20,6 +20,8 @@ public:
 
     Mask(int width, int height);
 
+    ~Mask();
+
     void createLabels();
 
     int getLength();

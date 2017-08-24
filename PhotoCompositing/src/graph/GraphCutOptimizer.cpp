@@ -10,8 +10,6 @@
 #include "../image/bitmap/BMP.h"
 #include "../utils/Properties.h"
 
-double GraphCutOptimizer::MAX_WEIGHT = std::numeric_limits<double>::max();
-
 /////////////////////////////////////////////////////////////////////////////////
 
 GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function)
@@ -35,11 +33,14 @@ GraphCutOptimizer::~GraphCutOptimizer()
 {
     mImages.clear();
 
-    for (unsigned int i = 0; i < mNumberOfLabels; ++i)
+    if (optimizationComplete)
     {
-        delete[] mNodes[i];
+        for (unsigned int i = 0; i < mNumberOfLabels; ++i)
+        {
+            delete[] mNodes[i];
+        }
+        delete[] mNodes;
     }
-    delete[] mNodes;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +97,7 @@ void GraphCutOptimizer::optimize()
         auto t1 = std::chrono::high_resolution_clock::now();
 #endif // DEBUG_TIME
 
-        double dOldEnergy = MAX_WEIGHT; // almost infinity!
+        double dOldEnergy = std::numeric_limits<double>::max(); // almost infinity!
 
         for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
         {
