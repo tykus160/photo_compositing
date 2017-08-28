@@ -17,8 +17,6 @@ private:
     static const double WEIGHT_B;
 
 public:
-    static const unsigned char MAX_VALUE;
-
     unsigned char r = 0;
     unsigned char g = 0;
     unsigned char b = 0;

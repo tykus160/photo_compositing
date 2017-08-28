@@ -60,6 +60,9 @@
     <ClCompile Include="src\utils\Properties.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\image\ImageOperations.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graph\block.h">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\Properties.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\ImageOperations.h">
+      <Filter>src\image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

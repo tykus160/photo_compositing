@@ -27,6 +27,7 @@
     <ClCompile Include="src\image\bitmap\BMP.cpp" />
     <ClCompile Include="src\image\Histogram.cpp" />
     <ClCompile Include="src\image\Image.cpp" />
+    <ClCompile Include="src\image\ImageOperations.cpp" />
     <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\Properties.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="src\image\bitmap\BMPUtils.h" />
     <ClInclude Include="src\image\Histogram.h" />
     <ClInclude Include="src\image\Image.h" />
+    <ClInclude Include="src\image\ImageOperations.h" />
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\matrix\Matrix.h" />
