@@ -18,7 +18,7 @@
 */
 
 
-#include <stdio.h>
+//#include <stdio.h>
 #include "graph.h"
 
 Graph::Graph(void (*err_function)(char *))
