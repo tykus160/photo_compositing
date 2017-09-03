@@ -32,15 +32,7 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction f
 GraphCutOptimizer::~GraphCutOptimizer()
 {
     mImages.clear();
-
-    if (optimizationComplete)
-    {
-        for (unsigned int i = 0; i < mNumberOfLabels; ++i)
-        {
-            delete[] mNodes[i];
-        }
-        delete[] mNodes;
-    }
+    delete[] mNodes;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -77,12 +69,7 @@ void GraphCutOptimizer::init()
         throw std::logic_error("Cannot optimize without mask");
     }
 
-    mNodes = new Graph::node_id*[mNumberOfLabels];
-
-    for (unsigned int i = 0; i < mNumberOfLabels; ++i)
-    {
-        mNodes[i] = new Graph::node_id[mMask->getLength()];
-    }
+    mNodes = new Graph::node_id[mMask->getLength()];
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +89,7 @@ void GraphCutOptimizer::optimize()
         for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
         {
             double dEnergy = 0.0;
-            Graph* graph = new Graph();
+            Graph graph;
             Image* image = mImages.at(indexOfSource);
 
             // Preparing nodes
@@ -112,11 +99,11 @@ void GraphCutOptimizer::optimize()
                 {
                     if (mMask->getLabelAtCoordinate(x, y) == indexOfSource)
                     {
-                        mNodes[indexOfSource][image->getCoordinatesAsIndex(x, y)] = nullptr;
+                        mNodes[image->getCoordinatesAsIndex(x, y)] = nullptr;
                     }
                     else
                     {
-                        mNodes[indexOfSource][image->getCoordinatesAsIndex(x, y)] = graph->add_node();
+                        mNodes[image->getCoordinatesAsIndex(x, y)] = graph.add_node();
                     }
                 }
             }
@@ -138,7 +125,7 @@ void GraphCutOptimizer::optimize()
                 }
             }
 
-            dEnergy += graph->maxflow();
+            dEnergy += graph.maxflow();
 
             std::cout << "Energy: " << dEnergy << std::endl;
             
@@ -149,8 +136,8 @@ void GraphCutOptimizer::optimize()
                 {
                     for (int x = 0; x < mMask->getWidth(); ++x)
                     {
-                        auto node = mNodes[indexOfSource][image->getCoordinatesAsIndex(x, y)];
-                        if (node != nullptr && graph->what_segment(node) == Graph::SINK)
+                        auto node = mNodes[image->getCoordinatesAsIndex(x, y)];
+                        if (node != nullptr && graph.what_segment(node) == Graph::SINK)
                         {
                             mMask->setLabelAtCoordinate(x, y, indexOfSource);
                         }
@@ -162,8 +149,6 @@ void GraphCutOptimizer::optimize()
             {
                 std::cout << "Something went terribly wrong!" << std::endl;
             }
-
-            delete graph;
         }
 
 #ifdef DEBUG_TIME
@@ -179,7 +164,7 @@ void GraphCutOptimizer::optimize()
 /////////////////////////////////////////////////////////////////////////////////
 
 double GraphCutOptimizer::calculateEnergy(
-    Graph* graph,
+    Graph& graph,
     int indexOfSource,
     int x1,
     int y1,
@@ -197,8 +182,8 @@ double GraphCutOptimizer::calculateEnergy(
     auto pxL12 = mImages.at(label1)->get(x2, y2);
 
     // check if nodes at provided coordinates are active
-    bool active1 = mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)] != nullptr;
-    bool active2 = mNodes[indexOfSource][image->getCoordinatesAsIndex(x2, y2)] != nullptr;
+    bool active1 = mNodes[image->getCoordinatesAsIndex(x1, y1)] != nullptr;
+    bool active2 = mNodes[image->getCoordinatesAsIndex(x2, y2)] != nullptr;
 
     // calculate energy
     double e00 = active1 && active2 ? pxL11->distance(*pxL22) : 0.0;
@@ -211,9 +196,9 @@ double GraphCutOptimizer::calculateEnergy(
     {
         if (active2)
         {
-            graph->add_term2(
-                mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)],
-                mNodes[indexOfSource][image->getCoordinatesAsIndex(x2, y2)],
+            graph.add_term2(
+                mNodes[image->getCoordinatesAsIndex(x1, y1)],
+                mNodes[image->getCoordinatesAsIndex(x2, y2)],
                 e00,
                 e01,
                 e10,
@@ -221,12 +206,12 @@ double GraphCutOptimizer::calculateEnergy(
         }
         else
         {
-            graph->add_term1(mNodes[indexOfSource][image->getCoordinatesAsIndex(x1, y1)], e01, e11);
+            graph.add_term1(mNodes[image->getCoordinatesAsIndex(x1, y1)], e01, e11);
         }
     }
     else if (active2)
     {
-        graph->add_term1(mNodes[indexOfSource][image->getCoordinatesAsIndex(x2, y2)], e10, e11);
+        graph.add_term1(mNodes[image->getCoordinatesAsIndex(x2, y2)], e10, e11);
     }
     else
     {

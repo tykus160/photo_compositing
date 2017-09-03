@@ -12,7 +12,7 @@
 class GraphCutOptimizer
 {
 private:
-    Graph::node_id** mNodes;
+    Graph::node_id* mNodes;
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;
     Mask* mMask = nullptr;
@@ -25,7 +25,7 @@ private:
     RGBPixel* getOptimizedValue(int x, int y);
 
     double calculateEnergy(
-        Graph* graph,
+        Graph& graph,
         int indexOfSource,
         int x1,
         int y1,
