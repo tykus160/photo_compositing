@@ -25,7 +25,7 @@ void Properties::loadFile(char* filename)
     }
 }
 
-std::string& Properties::get(std::string key)
+std::string Properties::get(std::string key)
 {
     return mMap[key];
 }

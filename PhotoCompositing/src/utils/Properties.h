@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-class Properties
+class Properties final
 {
 private:
     
@@ -27,7 +27,7 @@ public:
     
     void loadFile(char* filename);
     
-    std::string& get(std::string key);
+    std::string get(std::string key);
     
     int getInt(std::string key);
 };
