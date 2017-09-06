@@ -177,18 +177,18 @@ double GraphCutOptimizer::calculateEnergy(
     auto pxI22 = image->get(x2, y2);
     int label1 = mMask->getLabelAtCoordinate(x1, y1);
     int label2 = mMask->getLabelAtCoordinate(x2, y2);
-    auto pxL11 = mImages.at(label1)->get(x1, y1);
-    auto pxL22 = mImages.at(label2)->get(x2, y2);
-    auto pxL12 = mImages.at(label1)->get(x2, y2);
+    auto pxL11 = label1 != Mask::NO_LABEL ? mImages.at(label1)->get(x1, y1) : nullptr;
+    auto pxL22 = label2 != Mask::NO_LABEL ? mImages.at(label2)->get(x2, y2) : nullptr;
+    auto pxL12 = label1 != Mask::NO_LABEL ? mImages.at(label1)->get(x2, y2) : nullptr;
 
     // check if nodes at provided coordinates are active
     bool active1 = mNodes[image->getCoordinatesAsIndex(x1, y1)] != nullptr;
     bool active2 = mNodes[image->getCoordinatesAsIndex(x2, y2)] != nullptr;
 
     // calculate energy
-    double e00 = active1 && active2 ? pxL11->distance(*pxL22) : 0.0;
-    double e01 = active1            ? pxL11->distance(*pxI22) : 0.0;
-    double e10 =            active2 ? pxI11->distance(*pxL12) : 0.0;
+    double e00 = active1 && active2 ? (pxL11 != nullptr && pxL22 != nullptr ? pxL11->distance(*pxL22) : random()) : 0.0;
+    double e01 = active1            ? (pxL11 != nullptr                     ? pxL11->distance(*pxI22) : random()) : 0.0;
+    double e10 =            active2 ? (pxL12 != nullptr                     ? pxI11->distance(*pxL12) : random()) : 0.0;
     double e11 =                      pxI11->distance(*pxI22);
 
     // add results to graph
@@ -246,4 +246,11 @@ RGBPixel* GraphCutOptimizer::getOptimizedValue(int x, int y)
     int label = mMask->getLabelAtCoordinate(x, y);
     RGBPixel* pixel = mImages.at(label)->get(x, y);
     return new RGBPixel(*pixel);
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+int GraphCutOptimizer::random()
+{
+    return std::rand();// % 100;
 }

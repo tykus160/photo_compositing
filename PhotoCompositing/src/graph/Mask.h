@@ -8,14 +8,14 @@
 class Mask
 {
 private:
-    static const int NO_LABEL;
-
     Image* mImage = nullptr;
     int mWidth;
     int mHeight;
     std::vector<int> mLabels;
 
 public:
+    static const int NO_LABEL;
+
     Mask(Image* image);
 
     Mask(int width, int height);

@@ -32,6 +32,9 @@ private:
         int x2,
         int y2);
 
+    /** Helper random generator */
+    int random();
+
 public:
     GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function);
 

@@ -12,13 +12,13 @@ Mask::Mask(Image* image) :
 {
     mWidth = mImage->getWidth();
     mHeight = mImage->getHeight();
-    mLabels.resize(getLength(), 0);
+    mLabels.resize(getLength(), NO_LABEL);
 }
 
 Mask::Mask(int width, int height) :
     mWidth(width), mHeight(height)
 {
-    mLabels.resize(getLength(), 0);
+    mLabels.resize(getLength(), NO_LABEL);
 }
 
 Mask::~Mask()
@@ -36,7 +36,7 @@ void Mask::createLabels()
         px.b = 255;
         std::map<unsigned int, int> mColors; // temporal storage for all colors in mask
         int colorCounter = 0;
-        mColors[px.toHex()] = colorCounter; // add white color as default (TODO this shouldn't be the same value as first found label)
+        mColors[px.toHex()] = NO_LABEL; // add white color as default
 
         for (int j = 0; j < mImage->getHeight(); ++j)
         {
