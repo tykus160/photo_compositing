@@ -25,7 +25,6 @@
     <ClCompile Include="src\graph\Mask.cpp" />
     <ClCompile Include="src\graph\maxflow.cpp" />
     <ClCompile Include="src\image\bitmap\BMP.cpp" />
-    <ClCompile Include="src\image\Histogram.cpp" />
     <ClCompile Include="src\image\Image.cpp" />
     <ClCompile Include="src\image\ImageOperations.cpp" />
     <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp" />
@@ -42,7 +41,6 @@
     <ClInclude Include="src\graph\Mask.h" />
     <ClInclude Include="src\image\bitmap\BMP.h" />
     <ClInclude Include="src\image\bitmap\BMPUtils.h" />
-    <ClInclude Include="src\image\Histogram.h" />
     <ClInclude Include="src\image\Image.h" />
     <ClInclude Include="src\image\ImageOperations.h" />
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h" />

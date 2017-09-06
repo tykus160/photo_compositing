@@ -45,9 +45,6 @@
     <ClCompile Include="src\image\bitmap\BMP.cpp">
       <Filter>src\image\bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="src\image\Histogram.cpp">
-      <Filter>src\image</Filter>
-    </ClCompile>
     <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp">
       <Filter>src\image\rgbpixel</Filter>
     </ClCompile>
@@ -97,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="src\image\bitmap\BMP.h">
       <Filter>src\image\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="src\image\Histogram.h">
-      <Filter>src\image</Filter>
     </ClInclude>
     <ClInclude Include="src\image\rgbpixel\RGBPixel.h">
       <Filter>src\image\rgbpixel</Filter>
