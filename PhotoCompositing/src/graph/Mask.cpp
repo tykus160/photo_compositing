@@ -21,6 +21,14 @@ Mask::Mask(int width, int height) :
     mLabels.resize(getLength(), NO_LABEL);
 }
 
+Mask::Mask(const Mask& other)
+{
+    mWidth = other.mWidth;
+    mHeight = other.mHeight;
+    mLabels = other.mLabels;
+    // do not copy address of image, you shouldn't need this
+}
+
 Mask::~Mask()
 {
     mLabels.clear();

@@ -20,6 +20,8 @@ public:
 
     Mask(int width, int height);
 
+    Mask(const Mask& other);
+
     ~Mask();
 
     void createLabels();

@@ -16,6 +16,7 @@ private:
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;
     Mask* mMask = nullptr;
+    Mask* mMaskOrg = nullptr;
     bool optimizationComplete = false;
     CostFunction costFunction;
 
@@ -31,6 +32,8 @@ private:
         int y1,
         int x2,
         int y2);
+
+    void calculateData(Graph& graph, int indexOfSource, int x, int y);
 
     /** Helper random generator */
     int random();

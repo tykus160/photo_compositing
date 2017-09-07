@@ -33,6 +33,7 @@ GraphCutOptimizer::~GraphCutOptimizer()
 {
     mImages.clear();
     delete[] mNodes;
+    delete mMaskOrg;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +69,7 @@ void GraphCutOptimizer::init()
     {
         throw std::logic_error("Cannot optimize without mask");
     }
-
+    mMaskOrg = new Mask(*mMask);
     mNodes = new Graph::node_id[mMask->getLength()];
 }
 
@@ -122,6 +123,7 @@ void GraphCutOptimizer::optimize()
                     {
                         dEnergy += calculateEnergy(graph, indexOfSource, x, y, x, y + 1);
                     }
+                    calculateData(graph, indexOfSource, x, y);
                 }
             }
 
@@ -177,13 +179,13 @@ double GraphCutOptimizer::calculateEnergy(
     int label2 = mMask->getLabelAtCoordinate(x2, y2);
 
     auto colorM0 = label1 != Mask::NO_LABEL ? mImages.at(label1)->get(x1, y1) : nullptr;
-    auto colorM1 =                            mImages.at(indexOfSource)->get(x1, y1);
+    auto colorM1 = image->get(x1, y1);
     auto colorN0 = label2 != Mask::NO_LABEL ? mImages.at(label2)->get(x2, y2) : nullptr;
-    auto colorN1 =                            mImages.at(indexOfSource)->get(x2, y2);
+    auto colorN1 = image->get(x2, y2);
 
     // check if nodes at provided coordinates are active
-    bool active1 = mNodes[mImages.at(indexOfSource)->getCoordinatesAsIndex(x1, y1)] != nullptr;
-    bool active2 = mNodes[mImages.at(indexOfSource)->getCoordinatesAsIndex(x2, y2)] != nullptr;
+    bool active1 = mNodes[image->getCoordinatesAsIndex(x1, y1)] != nullptr;
+    bool active2 = mNodes[image->getCoordinatesAsIndex(x2, y2)] != nullptr;
 
     // calculate energy
     double e00 = active1 && active2 ? (colorM0 != nullptr && colorN0 != nullptr ? colorM0->distance(*colorN0) : random()) : 0.0;
@@ -218,14 +220,21 @@ double GraphCutOptimizer::calculateEnergy(
         // nothing to add
         result = e11;
     }
-    /*if (active1)
-    {
-        double e0 = label1 == label1org ? 0 : 30;
-        double e1 = indexOfSource == label1org ? 0 : 30;
-        graph.add_term1(mNodes[image->getCoordinatesAsIndex(x1, y1)], e0, e1);
-    }*/
 
     return result;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+void GraphCutOptimizer::calculateData(Graph& graph, int indexOfSource, int x, int y)
+{
+    auto node = mNodes[mImages.at(indexOfSource)->getCoordinatesAsIndex(x, y)];
+    if (node != nullptr)
+    {
+        int e0 = mMask->getLabelAtCoordinate(x, y) == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 30;
+        int e1 =                     indexOfSource == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 30;
+        graph.add_term1(node, e0, e1);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -258,5 +267,5 @@ RGBPixel* GraphCutOptimizer::getOptimizedValue(int x, int y)
 
 int GraphCutOptimizer::random()
 {
-    return std::rand() % 30;
+    return std::rand() % 30 + 1;
 }
