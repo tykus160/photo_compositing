@@ -231,8 +231,8 @@ void GraphCutOptimizer::calculateData(Graph& graph, int indexOfSource, int x, in
     auto node = mNodes[mImages.at(indexOfSource)->getCoordinatesAsIndex(x, y)];
     if (node != nullptr)
     {
-        int e0 = mMask->getLabelAtCoordinate(x, y) == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 30;
-        int e1 =                     indexOfSource == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 30;
+        int e0 = mMask->getLabelAtCoordinate(x, y) == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 1000;
+        int e1 =                     indexOfSource == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : 1000;
         graph.add_term1(node, e0, e1);
     }
 }
@@ -267,5 +267,5 @@ RGBPixel* GraphCutOptimizer::getOptimizedValue(int x, int y)
 
 int GraphCutOptimizer::random()
 {
-    return std::rand() % 30 + 1;
+    return std::rand();// % 1000 + 1;
 }
