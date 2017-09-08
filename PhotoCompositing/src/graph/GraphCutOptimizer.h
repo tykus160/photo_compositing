@@ -9,16 +9,24 @@
 #include "Mask.h"
 #include "CostFunctions.h"
 
+enum Method
+{
+    DEFAULT, GRADIENT
+};
+
 class GraphCutOptimizer
 {
 private:
     Graph::node_id* mNodes;
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;
+    std::vector<Image*> mImagesGradients;
     Mask* mMask = nullptr;
     Mask* mMaskOrg = nullptr;
     bool optimizationComplete = false;
     CostFunction costFunction;
+
+    Method method;
 
     /** Called at the beginning of optimize() */
     void init();
@@ -39,7 +47,7 @@ private:
     int random();
 
 public:
-    GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function);
+    GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method = DEFAULT);
 
     ~GraphCutOptimizer();
 

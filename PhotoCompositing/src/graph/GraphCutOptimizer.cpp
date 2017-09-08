@@ -8,11 +8,12 @@
 #endif // DEBUG_TIME
 
 #include "../image/bitmap/BMP.h"
+#include "../image/ImageOperations.h"
 #include "../utils/Properties.h"
 
 /////////////////////////////////////////////////////////////////////////////////
 
-GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function)
+GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method)
 {
     if (numberOfLabels == 0)
     {
@@ -22,6 +23,7 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction f
     {
         throw std::invalid_argument("function cannot be null");
     }
+    this->method = method;
     mNumberOfLabels = numberOfLabels;
     mImages.reserve(mNumberOfLabels);
     costFunction = function;
@@ -32,6 +34,7 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction f
 GraphCutOptimizer::~GraphCutOptimizer()
 {
     mImages.clear();
+    mImagesGradients.clear();
     delete[] mNodes;
     delete mMaskOrg;
 }
@@ -42,6 +45,10 @@ void GraphCutOptimizer::addImage(Image* image)
 {
     if (mImages.size() < mNumberOfLabels)
     {
+        if (method == GRADIENT)
+        {
+            mImagesGradients.push_back(ImageOperations::sobel(image));
+        }
         mImages.push_back(image);
     }
     else
@@ -174,13 +181,14 @@ double GraphCutOptimizer::calculateEnergy(
     int y2)
 {
     double result = 0.0;
-    auto image = mImages.at(indexOfSource);
+    auto imagesArray = method == DEFAULT ? &mImages : &mImagesGradients;
+    auto image = imagesArray->at(indexOfSource);
     int label1 = mMask->getLabelAtCoordinate(x1, y1);
     int label2 = mMask->getLabelAtCoordinate(x2, y2);
 
-    auto colorM0 = label1 != Mask::NO_LABEL ? mImages.at(label1)->get(x1, y1) : nullptr;
+    auto colorM0 = label1 != Mask::NO_LABEL ? imagesArray->at(label1)->get(x1, y1) : nullptr;
     auto colorM1 = image->get(x1, y1);
-    auto colorN0 = label2 != Mask::NO_LABEL ? mImages.at(label2)->get(x2, y2) : nullptr;
+    auto colorN0 = label2 != Mask::NO_LABEL ? imagesArray->at(label2)->get(x2, y2) : nullptr;
     auto colorN1 = image->get(x2, y2);
 
     // check if nodes at provided coordinates are active
