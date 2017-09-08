@@ -11,6 +11,7 @@ private:
     Image* mImage = nullptr;
     int mWidth;
     int mHeight;
+    int mLabelCounter = 0;
     std::vector<int> mLabels;
 
 public:
@@ -39,6 +40,9 @@ public:
     void setLabelAtCoordinate(int x, int y, int label);
 
     void saveToImage(std::string filename);
+
+    /** replaces every NO_LABEL with random data */
+    void fill();
 };
 
 #endif // !__MASK_H__

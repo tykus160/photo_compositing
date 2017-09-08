@@ -64,3 +64,18 @@ Image* ImageOperations::sobel(Image* input)
     }
     return filtered;
 }
+
+Image* ImageOperations::minimum(Image** inputs)
+{
+    Image* result = new BMP(inputs[0]->getWidth(), inputs[0]->getHeight());
+
+    for (int y = 0; y < result->getHeight(); ++y)
+    {
+        for (int x = 0; x < result->getWidth(); ++x)
+        {
+            // do the magic
+        }
+    }
+
+    return result;
+}

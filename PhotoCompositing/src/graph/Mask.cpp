@@ -25,6 +25,7 @@ Mask::Mask(const Mask& other)
 {
     mWidth = other.mWidth;
     mHeight = other.mHeight;
+    mLabelCounter = other.mLabelCounter;
     mLabels = other.mLabels;
     // do not copy address of image, you shouldn't need this
 }
@@ -43,7 +44,7 @@ void Mask::createLabels()
         px.g = 255;
         px.b = 255;
         std::map<unsigned int, int> mColors; // temporal storage for all colors in mask
-        int colorCounter = 0;
+        mLabelCounter = 0;
         mColors[px.toHex()] = NO_LABEL; // add white color as default
 
         for (int j = 0; j < mImage->getHeight(); ++j)
@@ -56,8 +57,8 @@ void Mask::createLabels()
                 if (it == mColors.end())
                 {
                     //element not found
-                    mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = colorCounter;
-                    mColors[hex] = colorCounter++;
+                    mLabels.at(mImage->getCoordinatesAsIndex(i, j)) = mLabelCounter;
+                    mColors[hex] = mLabelCounter++;
                     std::cout << "coord (" << i << "," << j << "), hex = " << hex << std::endl;
                 }
                 else
@@ -66,7 +67,7 @@ void Mask::createLabels()
                 }
             }
         }
-        std::cout << "Found colors: " << colorCounter << std::endl;
+        std::cout << "Found colors: " << mLabelCounter << std::endl;
         mColors.clear();
     }
 }
@@ -126,4 +127,18 @@ void Mask::saveToImage(std::string filename)
     }
     image->saveToFile(filename);
     delete image;
+}
+
+void Mask::fill()
+{
+    for (int j = 0; j < mImage->getHeight(); ++j)
+    {
+        for (int i = 0; i < mImage->getWidth(); ++i)
+        {
+            if (getLabelAtCoordinate(i, j) == NO_LABEL)
+            {
+                setLabelAtCoordinate(i, j, std::rand() % mLabelCounter);
+            }
+        }
+    }
 }

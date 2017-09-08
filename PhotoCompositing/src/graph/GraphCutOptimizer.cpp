@@ -77,6 +77,7 @@ void GraphCutOptimizer::init()
         throw std::logic_error("Cannot optimize without mask");
     }
     mMaskOrg = new Mask(*mMask);
+    mMask->fill();
     mNodes = new Graph::node_id[mMask->getLength()];
 }
 
@@ -94,71 +95,75 @@ void GraphCutOptimizer::optimize()
 
         double dOldEnergy = std::numeric_limits<double>::max(); // almost infinity!
 
-        for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
+        for (int iCycle = 0; iCycle < 10; ++iCycle) // convergence may not come in first cycle, more needed
         {
-            double dEnergy = 0.0;
-            Graph graph;
-            Image* image = mImages.at(indexOfSource);
-
-            // Preparing nodes
-            for (int y = 0; y < mMask->getHeight(); ++y)
+            for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
             {
-                for (int x = 0; x < mMask->getWidth(); ++x)
-                {
-                    if (mMask->getLabelAtCoordinate(x, y) == indexOfSource)
-                    {
-                        mNodes[image->getCoordinatesAsIndex(x, y)] = nullptr;
-                    }
-                    else
-                    {
-                        mNodes[image->getCoordinatesAsIndex(x, y)] = graph.add_node();
-                    }
-                }
-            }
+                double dEnergy = 0.0;
+                Graph graph;
+                Image* image = mImages.at(indexOfSource);
 
-            // do the calculation
-            for (int y = 0; y < mMask->getHeight(); ++y)
-            {
-                for (int x = 0; x < mMask->getWidth(); ++x)
-                {
-                    if (x < mMask->getWidth() - 1) // horizontal
-                    {
-                        dEnergy += calculateEnergy(graph, indexOfSource, x, y, x + 1, y);
-                    }
-
-                    if (y < mMask->getHeight() - 1) // vertical
-                    {
-                        dEnergy += calculateEnergy(graph, indexOfSource, x, y, x, y + 1);
-                    }
-                    calculateData(graph, indexOfSource, x, y);
-                }
-            }
-
-            dEnergy += graph.maxflow();
-
-            std::cout << "Energy: " << dEnergy << std::endl;
-            
-            if (dEnergy < dOldEnergy) // validity check
-            {
-                // assign new label
+                // Preparing nodes
                 for (int y = 0; y < mMask->getHeight(); ++y)
                 {
                     for (int x = 0; x < mMask->getWidth(); ++x)
                     {
-                        auto node = mNodes[image->getCoordinatesAsIndex(x, y)];
-                        if (node != nullptr && graph.what_segment(node) == Graph::SINK)
+                        if (mMask->getLabelAtCoordinate(x, y) == indexOfSource)
                         {
-                            mMask->setLabelAtCoordinate(x, y, indexOfSource);
+                            mNodes[image->getCoordinatesAsIndex(x, y)] = nullptr;
+                        }
+                        else
+                        {
+                            mNodes[image->getCoordinatesAsIndex(x, y)] = graph.add_node();
                         }
                     }
                 }
-                dOldEnergy = dEnergy;
-            }
-            else
-            {
-                std::cout << "Something went terribly wrong!" << std::endl;
-            }
-        }
+
+                // do the calculation
+                for (int y = 0; y < mMask->getHeight(); ++y)
+                {
+                    for (int x = 0; x < mMask->getWidth(); ++x)
+                    {
+                        if (x < mMask->getWidth() - 1) // horizontal
+                        {
+                            dEnergy += calculateEnergy(graph, indexOfSource, x, y, x + 1, y);
+                        }
+
+                        if (y < mMask->getHeight() - 1) // vertical
+                        {
+                            dEnergy += calculateEnergy(graph, indexOfSource, x, y, x, y + 1);
+                        }
+                        calculateData(graph, indexOfSource, x, y);
+                    }
+                }
+
+                dEnergy += graph.maxflow();
+
+                std::cout << "Cycle: " << iCycle << ", index of source: "
+                    << indexOfSource << ", Energy: " << dEnergy << std::endl;
+
+                if (dEnergy < dOldEnergy) // validity check
+                {
+                    // assign new label
+                    for (int y = 0; y < mMask->getHeight(); ++y)
+                    {
+                        for (int x = 0; x < mMask->getWidth(); ++x)
+                        {
+                            auto node = mNodes[image->getCoordinatesAsIndex(x, y)];
+                            if (node != nullptr && graph.what_segment(node) == Graph::SINK)
+                            {
+                                mMask->setLabelAtCoordinate(x, y, indexOfSource);
+                            }
+                        }
+                    }
+                    dOldEnergy = dEnergy;
+                }
+                else
+                {
+                    std::cout << "Something went terribly wrong!" << std::endl;
+                }
+            } // source
+        } // cycle
 
 #ifdef DEBUG_TIME
         auto t2 = std::chrono::high_resolution_clock::now();
@@ -196,10 +201,10 @@ double GraphCutOptimizer::calculateEnergy(
     bool active2 = mNodes[image->getCoordinatesAsIndex(x2, y2)] != nullptr;
 
     // calculate energy
-    double e00 = active1 && active2 ? (colorM0 != nullptr && colorN0 != nullptr ? colorM0->distance(*colorN0) : random()) : 0.0;
-    double e01 = active1            ? (colorN0 != nullptr                       ? colorM1->distance(*colorN0) : random()) : 0.0;
-    double e10 =            active2 ? (colorM0 != nullptr                       ? colorM0->distance(*colorN1) : random()) : 0.0;
-    double e11 =                                                                  colorM1->distance(*colorN1);
+    double e00 = active1 && active2 ? colorM0->distance(*colorN0) : 0.0;
+    double e01 = active1            ? colorM1->distance(*colorN0) : 0.0;
+    double e10 =            active2 ? colorM0->distance(*colorN1) : 0.0;
+    double e11 =                      colorM1->distance(*colorN1);
 
     // add results to graph
     if (active1)
@@ -269,11 +274,4 @@ RGBPixel* GraphCutOptimizer::getOptimizedValue(int x, int y)
     int label = mMask->getLabelAtCoordinate(x, y);
     RGBPixel* pixel = mImages.at(label)->get(x, y);
     return new RGBPixel(*pixel);
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-
-int GraphCutOptimizer::random()
-{
-    return std::rand();// % 1000 + 1;
 }

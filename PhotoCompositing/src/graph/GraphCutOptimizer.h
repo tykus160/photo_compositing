@@ -43,9 +43,6 @@ private:
 
     void calculateData(Graph& graph, int indexOfSource, int x, int y);
 
-    /** Helper random generator */
-    int random();
-
 public:
     GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method = DEFAULT);
 

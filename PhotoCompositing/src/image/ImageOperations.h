@@ -10,6 +10,8 @@ namespace ImageOperations
 
     /** performs horizontal and vertical filtering */
     Image* sobel(Image* input);
+
+    Image* minimum(Image** inputs);
 }
 
 #endif // !__IMAGE_OPERATIONS_H__
