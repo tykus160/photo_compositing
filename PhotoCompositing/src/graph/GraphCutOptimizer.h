@@ -21,6 +21,7 @@ private:
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;
     std::vector<Image*> mImagesGradients;
+    Image* mMinGradient = nullptr;
     Mask* mMask = nullptr;
     Mask* mMaskOrg = nullptr;
     bool optimizationComplete = false;

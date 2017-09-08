@@ -65,15 +65,30 @@ Image* ImageOperations::sobel(Image* input)
     return filtered;
 }
 
-Image* ImageOperations::minimum(Image** inputs)
+Image* ImageOperations::minimum(std::vector<Image*>& inputs)
 {
     Image* result = new BMP(inputs[0]->getWidth(), inputs[0]->getHeight());
-
+    RGBPixel pxBlack;
     for (int y = 0; y < result->getHeight(); ++y)
     {
         for (int x = 0; x < result->getWidth(); ++x)
         {
-            // do the magic
+            double difference = std::numeric_limits<double>::max();
+            RGBPixel* tmp = nullptr;
+
+            for (auto image : inputs)
+            {
+                double tmpDiff = pxBlack.distance(*(image->get(x, y)));
+                if (tmpDiff < difference)
+                {
+                    difference = tmpDiff;
+                    tmp = image->get(x, y);
+                }
+            }
+            if (tmp != nullptr)
+            {
+                result->set(x, y, new RGBPixel(*tmp));
+            }
         }
     }
 

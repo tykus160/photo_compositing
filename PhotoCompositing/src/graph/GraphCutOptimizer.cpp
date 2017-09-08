@@ -26,6 +26,10 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction f
     this->method = method;
     mNumberOfLabels = numberOfLabels;
     mImages.reserve(mNumberOfLabels);
+    if (method == GRADIENT)
+    {
+        mImagesGradients.reserve(mNumberOfLabels);
+    }
     costFunction = function;
 }
 
@@ -37,6 +41,7 @@ GraphCutOptimizer::~GraphCutOptimizer()
     mImagesGradients.clear();
     delete[] mNodes;
     delete mMaskOrg;
+    delete mMinGradient;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +84,10 @@ void GraphCutOptimizer::init()
     mMaskOrg = new Mask(*mMask);
     mMask->fill();
     mNodes = new Graph::node_id[mMask->getLength()];
+    if (method == GRADIENT)
+    {
+        mMinGradient = ImageOperations::minimum(mImagesGradients);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +104,7 @@ void GraphCutOptimizer::optimize()
 
         double dOldEnergy = std::numeric_limits<double>::max(); // almost infinity!
 
-        for (int iCycle = 0; iCycle < 10; ++iCycle) // convergence may not come in first cycle, more needed
+        for (int iCycle = 0; iCycle < 2; ++iCycle) // convergence may not come in first cycle, more needed
         {
             for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
             {
@@ -200,11 +209,23 @@ double GraphCutOptimizer::calculateEnergy(
     bool active1 = mNodes[image->getCoordinatesAsIndex(x1, y1)] != nullptr;
     bool active2 = mNodes[image->getCoordinatesAsIndex(x2, y2)] != nullptr;
 
+    double lowestDiff = 0;
+    if (method == GRADIENT)
+    {
+        // additional operations for gradient minimization
+        auto gradM = mMinGradient->get(x1, y1);
+        auto gradN = mMinGradient->get(x2, y2);
+        RGBPixel pxBlack;
+        double diffM = pxBlack.distance(*gradM);
+        double diffN = pxBlack.distance(*gradN);
+        lowestDiff = diffM < diffN ? diffM : diffN;
+    }
+
     // calculate energy
-    double e00 = active1 && active2 ? colorM0->distance(*colorN0) : 0.0;
-    double e01 = active1            ? colorM1->distance(*colorN0) : 0.0;
-    double e10 =            active2 ? colorM0->distance(*colorN1) : 0.0;
-    double e11 =                      colorM1->distance(*colorN1);
+    double e00 = active1 && active2 ? (label1 != label2 ? colorM0->distance(*colorN0) - lowestDiff : 0.0) : 0.0;
+    double e01 = active1            ? (indexOfSource != label2 ? colorM1->distance(*colorN0) - lowestDiff : 0.0) : 0.0;
+    double e10 = active2            ? (indexOfSource != label1 ? colorM0->distance(*colorN1) - lowestDiff : 0.0) : 0.0;
+    double e11 = method == DEFAULT  ? colorM1->distance(*colorN1) : 0.0;
 
     // add results to graph
     if (active1)
