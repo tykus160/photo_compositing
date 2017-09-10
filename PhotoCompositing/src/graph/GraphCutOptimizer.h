@@ -20,8 +20,10 @@ private:
     Graph::node_id* mNodes;
     unsigned int mNumberOfLabels;
     std::vector<Image*> mImages;
-    std::vector<Image*> mImagesGradients;
-    Image* mMinGradient = nullptr;
+    std::vector<Image*> mImagesGradientsH;
+    std::vector<Image*> mImagesGradientsV;
+    Image* mMinGradientH = nullptr;
+    Image* mMinGradientV = nullptr;
     Mask* mMask = nullptr;
     Mask* mMaskOrg = nullptr;
     bool optimizationComplete = false;
@@ -39,10 +41,9 @@ private:
         int indexOfSource,
         int x1,
         int y1,
-        int x2,
-        int y2);
+        bool horizontal);
 
-    void calculateData(Graph& graph, int indexOfSource, int x, int y);
+    int calculateData(Graph& graph, int indexOfSource, int x, int y);
 
 public:
     GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method = DEFAULT);

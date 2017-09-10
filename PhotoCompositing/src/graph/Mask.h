@@ -43,6 +43,8 @@ public:
 
     /** replaces every NO_LABEL with random data */
     void fill();
+
+    int getNumberOfLabels();
 };
 
 #endif // !__MASK_H__

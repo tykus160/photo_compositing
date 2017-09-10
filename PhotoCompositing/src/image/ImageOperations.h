@@ -12,6 +12,10 @@ namespace ImageOperations
     /** performs horizontal and vertical filtering */
     Image* sobel(Image* input);
 
+    Image* sobelH(Image* input);
+
+    Image* sobelV(Image* input);
+
     Image* minimum(std::vector<Image*>& inputs);
 }
 

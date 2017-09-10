@@ -1,5 +1,6 @@
 #include "Mask.h"
 
+#include <cstdlib>
 #include <map>
 #include <iostream>
 
@@ -141,4 +142,9 @@ void Mask::fill()
             }
         }
     }
+}
+
+int Mask::getNumberOfLabels()
+{
+    return mLabelCounter;
 }
