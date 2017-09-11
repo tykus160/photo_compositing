@@ -1,5 +1,5 @@
 #include "main.h"
-#include "image/ImageOperations.h"
+
 int main(int argc, char** argv)
 {
     std::cout << "Hello world!" << std::endl;
@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
             int numOfLabels = mask.getNumberOfLabels();
 
-            GraphCutOptimizer opt(numOfLabels, CostFunctions::crossCost, GRADIENT);
+            GraphCutOptimizer opt(numOfLabels, GRADIENT);
             BMP** bmps = new BMP*[numOfLabels];
             for (int i = 0; i < numOfLabels; ++i)
             {
@@ -28,8 +28,6 @@ int main(int argc, char** argv)
 
             opt.addMask(&mask);
             opt.optimize();
-
-            opt.saveToImage(Properties::getInstance().get("dest_image"));
 
             for (int i = 0; i < numOfLabels; ++i)
             {

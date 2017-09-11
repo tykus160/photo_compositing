@@ -45,9 +45,6 @@
     <ClCompile Include="src\image\rgbpixel\RGBPixel.cpp">
       <Filter>src\image\rgbpixel</Filter>
     </ClCompile>
-    <ClCompile Include="src\graph\CostFunctions.cpp">
-      <Filter>src\graph</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils\StringUtils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>src\graph</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\graph.h">
-      <Filter>src\graph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graph\CostFunctions.h">
       <Filter>src\graph</Filter>
     </ClInclude>
     <ClInclude Include="src\graph\Mask.h">

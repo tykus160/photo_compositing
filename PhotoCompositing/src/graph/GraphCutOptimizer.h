@@ -7,7 +7,6 @@
 #include "graph.h"
 #include "../image/Image.h"
 #include "Mask.h"
-#include "CostFunctions.h"
 
 enum Method
 {
@@ -27,7 +26,6 @@ private:
     Mask* mMask = nullptr;
     Mask* mMaskOrg = nullptr;
     bool optimizationComplete = false;
-    CostFunction costFunction;
 
     Method method;
 
@@ -43,10 +41,18 @@ private:
         int y1,
         bool horizontal);
 
-    int calculateData(Graph& graph, int indexOfSource, int x, int y);
+    int calculatePenalty(
+        Graph& graph,
+        int indexOfSource,
+        int x1,
+        int y1,
+        bool horizontal,
+        int weight);
+
+    int calculateData(Graph& graph, int indexOfSource, int x, int y, int weight);
 
 public:
-    GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method = DEFAULT);
+    GraphCutOptimizer(unsigned int numberOfLabels, Method method = DEFAULT);
 
     ~GraphCutOptimizer();
 
@@ -56,7 +62,7 @@ public:
 
     void optimize();
 
-    void saveToImage(std::string filename);
+    Image* getImage();
 };
 
 #endif // !__GRAPH_CUT_OPTIMIZER_H__

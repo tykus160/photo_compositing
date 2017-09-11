@@ -14,15 +14,11 @@
 
 /////////////////////////////////////////////////////////////////////////////////
 
-GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction function, Method method)
+GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, Method method)
 {
     if (numberOfLabels == 0)
     {
         throw std::invalid_argument("numberOfLabels must be greater than 0");
-    }
-    if (function == nullptr)
-    {
-        throw std::invalid_argument("function cannot be null");
     }
     this->method = method;
     mNumberOfLabels = numberOfLabels;
@@ -32,7 +28,6 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, CostFunction f
         mImagesGradientsH.reserve(mNumberOfLabels);
         mImagesGradientsV.reserve(mNumberOfLabels);
     }
-    costFunction = function;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +119,7 @@ void GraphCutOptimizer::optimize()
 
         double dOldEnergy = std::numeric_limits<double>::max(); // almost infinity!
 
-        for (int iCycle = 0; iCycle < 2; ++iCycle) // convergence may not come in first cycle, more needed
+        for (int iCycle = 0; iCycle < 5; ++iCycle) // convergence may not come in first cycle, more needed
         {
             for (int indexOfSource = 0; indexOfSource < mNumberOfLabels; ++indexOfSource) // loop for every label
             {
@@ -156,13 +151,15 @@ void GraphCutOptimizer::optimize()
                         if (x < mMask->getWidth() - 1) // horizontal
                         {
                             dEnergy += calculateEnergy(graph, indexOfSource, x, y, true);
+                            //dEnergy += calculatePenalty(graph, indexOfSource, x, y, true, 1000);
                         }
 
                         if (y < mMask->getHeight() - 1) // vertical
                         {
                             dEnergy += calculateEnergy(graph, indexOfSource, x, y, false);
+                            //dEnergy += calculatePenalty(graph, indexOfSource, x, y, false, 1000);
                         }
-                        dEnergy += calculateData(graph, indexOfSource, x, y);
+                        dEnergy += calculateData(graph, indexOfSource, x, y, 1000);
                     }
                 }
 
@@ -191,6 +188,18 @@ void GraphCutOptimizer::optimize()
                 {
                     std::cout << "Something went terribly wrong!" << std::endl;
                 }
+
+                /*
+                Image* result = getImage();
+                result->saveToFile("C:/Users/Wojciech/Dysk Google/magisterka/tests/test1/img_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
+                Image* sobel0 = ImageOperations::sobelH(result);
+                sobel0->saveToFile("C:/Users/Wojciech/Dysk Google/magisterka/tests/test1/img_sobel0_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
+                delete sobel0;
+                Image* sobel1 = ImageOperations::sobelV(result);
+                sobel1->saveToFile("C:/Users/Wojciech/Dysk Google/magisterka/tests/test1/img_sobel1_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
+                delete sobel1;
+                delete result;
+                */
             } // source
         } // cycle
 
@@ -244,8 +253,8 @@ double GraphCutOptimizer::calculateEnergy(
 
     // calculate energy
     double e00 = active1 && active2 ? (method == DEFAULT ||        labelM != labelN ? colorM0->distance(*colorN0) - lowestDiff : 0.0) : 0.0;
-    double e01 = active1            ? (method == DEFAULT || indexOfSource != labelN ? colorM1->distance(*colorN0) - lowestDiff : 0.0) : 0.0;
-    double e10 = active2            ? (method == DEFAULT || indexOfSource != labelM ? colorM0->distance(*colorN1) - lowestDiff : 0.0) : 0.0;
+    double e01 = active1            ? (method == DEFAULT || indexOfSource != labelM ? colorM0->distance(*colorN1) - lowestDiff : 0.0) : 0.0;
+    double e10 = active2            ? (method == DEFAULT || indexOfSource != labelN ? colorM1->distance(*colorN0) - lowestDiff : 0.0) : 0.0;
     double e11 = method == DEFAULT  ?                                                 colorM1->distance(*colorN1)                     : 0.0;
 
     // add results to graph
@@ -281,14 +290,68 @@ double GraphCutOptimizer::calculateEnergy(
 
 /////////////////////////////////////////////////////////////////////////////////
 
-int GraphCutOptimizer::calculateData(Graph& graph, int indexOfSource, int x, int y)
+int GraphCutOptimizer::calculatePenalty(
+    Graph& graph,
+    int indexOfSource,
+    int x1,
+    int y1,
+    bool horizontal,
+    int weight)
 {
-    const int MAX = 1000;
-    int e1 = indexOfSource == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : MAX;
+    int result = 0;
+    int x2 = horizontal ? x1 + 1 : x1;
+    int y2 = horizontal ? y1 : y1 + 1;
+
+    // check if nodes at provided coordinates are active
+    bool active1 = mNodes[mImages[0]->getCoordinatesAsIndex(x1, y1)] != nullptr;
+    bool active2 = mNodes[mImages[0]->getCoordinatesAsIndex(x2, y2)] != nullptr;
+
+    int labelM = mMask->getLabelAtCoordinate(x1, y1);
+    int labelN = mMask->getLabelAtCoordinate(x2, y2);
+
+    double e00 = active1 && active2 ? (labelM == labelN        ? 0.0 : weight) : 0.0;
+    double e01 = active1            ? (labelM == indexOfSource ? 0.0 : weight) : 0.0;
+    double e10 = active2            ? (labelN == indexOfSource ? 0.0 : weight) : 0.0;
+    double e11 = 0.0;
+
+    if (active1)
+    {
+        if (active2)
+        {
+            graph.add_term2(
+                mNodes[mImages[0]->getCoordinatesAsIndex(x1, y1)],
+                mNodes[mImages[0]->getCoordinatesAsIndex(x2, y2)],
+                e00,
+                e01,
+                e10,
+                e11);
+        }
+        else
+        {
+            graph.add_term1(mNodes[mImages[0]->getCoordinatesAsIndex(x1, y1)], e01, e11);
+        }
+    }
+    else if (active2)
+    {
+        graph.add_term1(mNodes[mImages[0]->getCoordinatesAsIndex(x2, y2)], e10, e11);
+    }
+    else
+    {
+        // nothing to do
+    }
+
+    return result;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+int GraphCutOptimizer::calculateData(Graph& graph, int indexOfSource, int x, int y, int weight)
+{
+    int e1 = indexOfSource == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : weight;
     auto node = mNodes[mImages.at(indexOfSource)->getCoordinatesAsIndex(x, y)];
     if (node != nullptr)
     {
-        int e0 = mMask->getLabelAtCoordinate(x, y) == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : MAX;
+        int e0 = mMask->getLabelAtCoordinate(x, y) == mMaskOrg->getLabelAtCoordinate(x, y) ? 0 : weight;
         graph.add_term1(node, e0, e1);
         e1 = 0; // setting to 0 as we don't want to add this to energy, since value is already in graph
     }
@@ -297,7 +360,7 @@ int GraphCutOptimizer::calculateData(Graph& graph, int indexOfSource, int x, int
 
 /////////////////////////////////////////////////////////////////////////////////
 
-void GraphCutOptimizer::saveToImage(std::string filename)
+Image* GraphCutOptimizer::getImage()
 {
     Image* image = new BMP(mMask->getWidth(), mMask->getHeight());
     for (int y = 0; y < mMask->getHeight(); ++y)
@@ -307,9 +370,7 @@ void GraphCutOptimizer::saveToImage(std::string filename)
             image->set(x, y, getOptimizedValue(x, y));
         }
     }
-    image->saveToFile(filename);
-    mMask->saveToImage(Properties::getInstance().get("debug_mask"));
-    delete image;
+    return image;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
