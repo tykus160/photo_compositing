@@ -8,9 +8,14 @@
 #include "../image/Image.h"
 #include "Mask.h"
 
+// TODO: describe methods
 enum Method
 {
-    DEFAULT, GRADIENT
+    COLOR,
+    GRADIENT,
+    COLOR_2ND,
+    GRADIENT_2ND,
+    COLOR_GRADIENT_MIXED
 };
 
 class GraphCutOptimizer
@@ -41,18 +46,10 @@ private:
         int y1,
         bool horizontal);
 
-    int calculatePenalty(
-        Graph& graph,
-        int indexOfSource,
-        int x1,
-        int y1,
-        bool horizontal,
-        int weight);
-
     int calculateData(Graph& graph, int indexOfSource, int x, int y, int weight);
 
 public:
-    GraphCutOptimizer(unsigned int numberOfLabels, Method method = DEFAULT);
+    GraphCutOptimizer(unsigned int numberOfLabels, Method method = COLOR);
 
     ~GraphCutOptimizer();
 
