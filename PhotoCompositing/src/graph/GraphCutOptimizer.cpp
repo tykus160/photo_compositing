@@ -270,10 +270,10 @@ double GraphCutOptimizer::calculateEnergy(
     {
         auto colorMN = imagesArray->at(labelM)->get(x2, y2);
         auto colorNM = imagesArray->at(labelN)->get(x1, y1);
-        e00 = active1 && active2 && labelM != labelN ? colorM0->distance(*colorMN) + colorNM->distance(*colorN0) : 0.0;
-        e01 = active1 &&     indexOfSource != labelM ? colorM0->distance(*colorMN) + colorM1->distance(*colorN1) : 0.0;
-        e10 = active2 &&     indexOfSource != labelN ? colorM1->distance(*colorN1) + colorNM->distance(*colorN0) : 0.0;
-        e11 = /* any condition? */                     colorM1->distance(*colorN1) * 2;
+        e00 = active1 && active2 && labelM != labelN ? colorM0->distance(*colorNM) + colorMN->distance(*colorN0) : 0.0;
+        e01 = active1 &&     indexOfSource != labelM ? colorM0->distance(*colorM1) + colorMN->distance(*colorN1) : 0.0;
+        e10 = active2 &&     indexOfSource != labelN ? colorM1->distance(*colorNM) + colorN1->distance(*colorMN) : 0.0;
+        e11 =                                                                                                      0.0;
     }
         break;
     default:
