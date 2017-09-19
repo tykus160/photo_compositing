@@ -23,7 +23,7 @@ GraphCutOptimizer::GraphCutOptimizer(unsigned int numberOfLabels, Method method)
     this->method = method;
     mNumberOfLabels = numberOfLabels;
     mImages.reserve(mNumberOfLabels);
-    if (method == GRADIENT)
+    if (method == GRADIENT || method == GRADIENT_2ND || method == COLOR_GRADIENT_MIXED)
     {
         mImagesGradientsH.reserve(mNumberOfLabels);
         mImagesGradientsV.reserve(mNumberOfLabels);
@@ -49,7 +49,7 @@ void GraphCutOptimizer::addImage(Image* image)
 {
     if (mImages.size() < mNumberOfLabels)
     {
-        if (method == GRADIENT || method == GRADIENT_2ND)
+        if (method == GRADIENT || method == GRADIENT_2ND || method == COLOR_GRADIENT_MIXED)
         {
             mImagesGradientsH.push_back(ImageOperations::sobelH(image));
             mImagesGradientsV.push_back(ImageOperations::sobelV(image));
@@ -267,13 +267,30 @@ double GraphCutOptimizer::calculateEnergy(
         break;
     case COLOR_2ND:
     case GRADIENT_2ND:
+    case COLOR_GRADIENT_MIXED:
     {
+        // if COLOR_GRADIENT_MIXED -> this is color phase
         auto colorMN = imagesArray->at(labelM)->get(x2, y2);
         auto colorNM = imagesArray->at(labelN)->get(x1, y1);
         e00 = active1 && active2 && labelM != labelN ? colorM0->distance(*colorNM) + colorMN->distance(*colorN0) : 0.0;
         e01 = active1 &&     indexOfSource != labelM ? colorM0->distance(*colorM1) + colorMN->distance(*colorN1) : 0.0;
         e10 = active2 &&     indexOfSource != labelN ? colorM1->distance(*colorNM) + colorN1->distance(*colorMN) : 0.0;
         e11 =                                                                                                      0.0;
+
+        if (method == COLOR_GRADIENT_MIXED) // do the same calculation as above using gradients
+        {
+            auto gradient = horizontal ? &mImagesGradientsH : &mImagesGradientsV;
+            colorM0 = gradient->at(labelM)->get(x1, y1);
+            colorM1 = gradient->at(indexOfSource)->get(x1, y1);
+            colorN0 = gradient->at(labelN)->get(x2, y2);
+            colorN1 = gradient->at(indexOfSource)->get(x2, y2);
+            colorMN = gradient->at(labelM)->get(x2, y2);
+            colorNM = gradient->at(labelN)->get(x1, y1);
+
+            e00 += active1 && active2 && labelM != labelN ? colorM0->distance(*colorNM) + colorMN->distance(*colorN0) : 0.0;
+            e01 += active1 &&     indexOfSource != labelM ? colorM0->distance(*colorM1) + colorMN->distance(*colorN1) : 0.0;
+            e10 += active2 &&     indexOfSource != labelN ? colorM1->distance(*colorNM) + colorN1->distance(*colorMN) : 0.0;
+        }
     }
         break;
     default:
