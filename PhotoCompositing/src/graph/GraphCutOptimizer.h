@@ -15,7 +15,8 @@ enum Method
     GRADIENT,
     COLOR_2ND,
     GRADIENT_2ND,
-    COLOR_GRADIENT_MIXED
+    COLOR_GRADIENT_MIXED,
+    UNDEFINED,
 };
 
 class GraphCutOptimizer

@@ -105,7 +105,7 @@ void GraphCutOptimizer::init()
 
 void GraphCutOptimizer::optimize()
 {
-    if (!optimizationComplete)
+    if (!optimizationComplete && method != UNDEFINED)
     {
         init();
 

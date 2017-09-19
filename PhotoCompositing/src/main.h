@@ -22,6 +22,8 @@ namespace Utils
     const int MIN_NUM_OF_ARGS = 2;
 
     void endMessage();
+
+    Method selectMethod();
 }
 
 #endif // !__MAIN_H__

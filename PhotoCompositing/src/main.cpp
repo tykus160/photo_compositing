@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {
-    std::cout << "Hello world!" << std::endl;
+    std::cout << "Graph Cut Optimization" << std::endl;
 
     if (argc >= Utils::MIN_NUM_OF_ARGS)
     {
@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
             int numOfLabels = mask.getNumberOfLabels();
 
-            GraphCutOptimizer opt(numOfLabels, GRADIENT);
+            GraphCutOptimizer opt(numOfLabels, Utils::selectMethod());
             BMP** bmps = new BMP*[numOfLabels];
             for (int i = 0; i < numOfLabels; ++i)
             {
@@ -50,4 +50,32 @@ void Utils::endMessage()
 {
     std::cout << "Press enter to close..." << std::endl;
     std::cin.get();
+}
+
+Method Utils::selectMethod()
+{
+    std::string methodName = Properties::getInstance().get("method");
+    std::cout << "Selected method: " << methodName << std::endl;
+    Method method = UNDEFINED;
+    if (methodName == "COLOR")
+    {
+        method = COLOR;
+    }
+    else if (methodName == "GRADIENT")
+    {
+        method = GRADIENT;
+    }
+    else if (methodName == "COLOR_2ND")
+    {
+        method = COLOR_2ND;
+    }
+    else if (methodName == "GRADIENT_2ND")
+    {
+        method = GRADIENT_2ND;
+    }
+    else if (methodName == "COLOR_GRADIENT_MIXED")
+    {
+        method = COLOR_GRADIENT_MIXED;
+    }
+    return method;
 }
