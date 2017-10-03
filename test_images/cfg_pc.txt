@@ -1,0 +1,11 @@
+mask=E:/testy/new_synthetic/mask.bmp
+image_0=E:/testy/new_synthetic/left.bmp
+image_1=E:/testy/new_synthetic/right.bmp
+save_path=E:/testy/new_synthetic/color_gradient/
+method=COLOR_GRADIENT_MIXED
+
+# psnr_color          = 28.482
+# psnr_color_2nd      = 55.310
+# psnr_gradient       = 32.676
+# psnr_gradient_2nd   = 53.754
+# psnr_color_gradient = 53.769

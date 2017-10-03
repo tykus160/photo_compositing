@@ -1,6 +1,0 @@
-mask=E:/GoogleDrive/magisterka/tests/test2/mask_1.bmp
-num_of_labels=2
-image_0=E:/GoogleDrive/magisterka/tests/test2/3_1.bmp
-image_1=E:/GoogleDrive/magisterka/tests/test2/4_1.bmp
-dest_image=E:/GoogleDrive/magisterka/tests/test2/sample_result.bmp
-debug_mask=E:/GoogleDrive/magisterka/tests/test2/sample_result_mask.bmp
