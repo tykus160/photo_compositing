@@ -114,8 +114,8 @@ void Mask::saveToImage(std::string filename)
             if (getLabelAtCoordinate(x, y) == 0)
             {
                 pixel->r = 255;
-                pixel->g = 255;
-                pixel->b = 255;
+                pixel->g = 0;
+                pixel->b = 0;
             }
             else if (getLabelAtCoordinate(x, y) == 1)
             {

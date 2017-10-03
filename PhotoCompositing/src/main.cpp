@@ -77,5 +77,9 @@ Method Utils::selectMethod()
     {
         method = COLOR_GRADIENT_MIXED;
     }
+    else
+    {
+        std::cout << "You did not add any of available methods!" << std::endl;
+    }
     return method;
 }

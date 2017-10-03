@@ -186,18 +186,20 @@ void GraphCutOptimizer::optimize()
 
                     Image* result = getImage();
                     result->saveToFile(path + "img_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
+#ifdef OUTPUT_GRADIENTS
                     Image* sobel0 = ImageOperations::sobelH(result);
                     sobel0->saveToFile(path + "img_sobel0_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
                     delete sobel0;
                     Image* sobel1 = ImageOperations::sobelV(result);
                     sobel1->saveToFile(path + "img_sobel1_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
                     delete sobel1;
+#endif // OUTPUT_GRADIENTS 
                     delete result;
                     mMask->saveToImage(path + "img_mask_" + std::to_string(iCycle) + std::to_string(indexOfSource) + ".bmp");
                 }
                 else
                 {
-                    std::cout << "Something went terribly wrong!" << std::endl;
+                    std::cout << "Nothing was minimized in this iteration." << std::endl;
                 }
             } // source
         } // cycle
@@ -224,7 +226,7 @@ double GraphCutOptimizer::calculateEnergy(
     double result = 0.0;
     int x2 = horizontal ? x1 + 1 : x1;
     int y2 = horizontal ? y1 : y1 + 1;
-    auto imagesArray = method == COLOR || method == COLOR_2ND ? &mImages : (horizontal ? &mImagesGradientsH : &mImagesGradientsV);
+    auto imagesArray = method == COLOR || method == COLOR_2ND || method == COLOR_GRADIENT_MIXED ? &mImages : (horizontal ? &mImagesGradientsH : &mImagesGradientsV);
     auto image = imagesArray->at(indexOfSource);
     int labelM = mMask->getLabelAtCoordinate(x1, y1);
     int labelN = mMask->getLabelAtCoordinate(x2, y2);
@@ -244,10 +246,10 @@ double GraphCutOptimizer::calculateEnergy(
     switch (method)
     {
     case COLOR:
-        e00 = active1 && active2 ? colorM0->distance(*colorN0) : 0.0;
-        e01 = active1            ? colorM0->distance(*colorN1) : 0.0;
-        e10 =            active2 ? colorM1->distance(*colorN0) : 0.0;
-        e11 =                      colorM1->distance(*colorN1);
+        e00 = active1 && active2 && labelM != labelN ? colorM0->distance(*colorN0) : 0.0;
+        e01 = active1     && indexOfSource != labelM ? colorM0->distance(*colorN1) : 0.0;
+        e10 = active2     && indexOfSource != labelN ? colorM1->distance(*colorN0) : 0.0;
+        e11 =                                          colorM1->distance(*colorN1);
         break;
     case GRADIENT:
     {
